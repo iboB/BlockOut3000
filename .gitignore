@@ -1,0 +1,9 @@
+# magnum related
+# intentionally not submodules as they are optional and change often
+corrade/
+magnum/
+
+# game related
+
+# build output
+bin/
