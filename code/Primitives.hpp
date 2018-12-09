@@ -20,20 +20,6 @@ using Primitive = std::array<Magnum::Vector3, N>;
 using LineSegment = Primitive<2>;
 using Triangle = Primitive<3>;
 
-struct VectorStrictWeakOrdering
-{
-    bool operator()(const Magnum::Vector3& a, const Magnum::Vector3& b)
-    {
-        for (size_t i = 0; i < 3; ++i)
-        {
-            if (a[i] < b[i]) return true;
-            if (a[i] > b[i]) return false;
-        }
-
-        return false; // equal
-    }
-};
-
 // A class that makes primitives avaialbale as keys for sets of maps
 // Warning! Using this class may be slow
 // In order to compensate for possible primitive winding this class sorts the input primitives
@@ -44,7 +30,7 @@ struct PrimitiveStrictWeakOrdering
     bool operator()(const Primitive<N>& a, const Primitive<N>& b) const
     {
         // cannot just compare triangles a-a b-b c-c, because trignales with different windings must match
-        VectorStrictWeakOrdering o;
+        Magnum::Math::StrictWeakOrderingFunc o;
 
         auto ca = a;
         std::sort(ca.begin(), ca.end(), o);
