@@ -1,6 +1,5 @@
-# magnum related
-# intentionally not submodules as they are optional and change often
-corrade/
+# all magnum subprojects are here
+# this is intentionally not a submodule as it's optional and changes a lot
 magnum/
 
 # game related

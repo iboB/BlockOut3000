@@ -12,8 +12,8 @@ set(CMAKE_MODULE_PATH
 include(src_group)
 
 if(${WITH_LOCAL_MAGNUM})
-    add_subdirectory(corrade)
-    add_subdirectory(magnum)
+    add_subdirectory(magnum/corrade)
+    add_subdirectory(magnum/magnum)
 endif()
 
 add_subdirectory(code)
