@@ -10,6 +10,7 @@
 #include <array>
 
 #include <Magnum/Math/Vector3.h>
+#include <Magnum/Math/StrictWeakOrdering.h>
 #include <Magnum/Magnum.h>
 
 // defines geometric primitives
@@ -30,7 +31,7 @@ struct PrimitiveStrictWeakOrdering
     bool operator()(const Primitive<N>& a, const Primitive<N>& b) const
     {
         // cannot just compare triangles a-a b-b c-c, because trignales with different windings must match
-        Magnum::Math::StrictWeakOrderingFunc o;
+        Magnum::Math::StrictWeakOrdering o;
 
         auto ca = a;
         std::sort(ca.begin(), ca.end(), o);
