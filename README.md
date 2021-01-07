@@ -6,15 +6,13 @@ A small 3D puzzle game. A clone of the classic DOS game Blockout.
 
 ## Building
 
-Uses [mosra/Magnum](https://github.com/mosra/magnum) as a base.
-
 *Instructions Coming soon*
 
 ## License and Copyright
 
 The source code is distributed under the MIT Software License. See LICENSE.txt for further details or copy [here](http://opensource.org/licenses/MIT).
 
-Copyright &copy; 2017-2018 Borislav Stanimirov.
+Copyright &copy; 2017-2021 Borislav Stanimirov.
 
 ### Blockout
 
