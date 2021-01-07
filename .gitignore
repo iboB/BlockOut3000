@@ -1,8 +1,6 @@
-# all magnum subprojects are here
-# this is intentionally not a submodule as it's optional and changes a lot
-magnum/
+build/
+out/
 
-# game related
-
-# build output
-bin/
+# ides
+.vscode/
+.vs/
