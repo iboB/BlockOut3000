@@ -52,6 +52,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) # all executables go
 # packages
 dep(itlib)
 dep(yama)
+dep(imgui)
+dep(sokol)
 
 # subdirs
 add_subdirectory(game)
