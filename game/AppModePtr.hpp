@@ -7,4 +7,7 @@
 //
 #pragma once
 
-#include "AppModePtr.hpp"
+#include <memory>
+
+class AppMode;
+using AppModePtr = std::unique_ptr<AppMode>;

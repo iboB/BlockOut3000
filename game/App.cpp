@@ -7,17 +7,20 @@
 //
 #include "App.hpp"
 
+#include "Time.hpp"
+#include "AppMode.hpp"
+
+#include "ModeFatalError.hpp"
+#include "ModeExperimental.hpp"
+
 #include "sokol-imgui.hpp"
 
 #include <yama/vector4.hpp>
-
-#include <chrono>
 
 namespace
 {
 
 using clock = std::chrono::steady_clock;
-using sec_t = std::chrono::duration<float>;
 
 class AppImpl
 {
@@ -43,6 +46,8 @@ public:
             simgui_desc_t desc = {};
             simgui_setup(&desc);
         }
+
+        m_nextMode = Make_Mode_Experimental();
     }
 
     ~AppImpl()
@@ -53,10 +58,15 @@ public:
 
     void frame()
     {
+        checkForModeChange();
+
         auto now = clock::now();
         auto dt = now - m_time;
-        auto dtsec = std::chrono::duration_cast<sec_t>(now - m_time);
-        if (dtsec.count() == 0) return;
+        auto dtsec = std::chrono::duration_cast<sec_t>(dt);
+
+        // too short frame to care
+        if (dtsec.count() < yama::constants::EPSILON) return;
+
         m_time = now;
 
         const int w = sapp_width();
@@ -64,22 +74,61 @@ public:
 
         simgui_new_frame(w, h, dtsec.count());
 
-        ImGui::ShowDemoWindow();
+        auto dtms = std::chrono::duration_cast<ms_t>(dt);
+        m_currentMode->update(dtms);
+
+        //ImGui::ShowDemoWindow();
 
         sg_begin_default_pass(&m_defaultPassAction, w, h);
+        m_currentMode->defaultRender({w, h});
         simgui_render();
         sg_end_pass();
         sg_commit();
     }
 
+    void checkForModeChange()
+    {
+        if (!m_nextMode) return;
+
+        // loop while we have a pending mode
+        int fails = 0;
+        while (true)
+        {
+            m_currentMode.reset();
+            AppModePtr pending;
+            pending.swap(m_nextMode);
+            auto success = pending->init(); // this might set the next mode
+            if (success)
+            {
+                printf("Switching to mode %s\n", pending->name());
+                m_currentMode = std::move(pending);
+                break;
+            }
+            else
+            {
+                printf("Error initializing mode %s\n", pending->name());
+                ++fails;
+            }
+
+            if (fails == 5 || !m_nextMode)
+            {
+                m_nextMode = Make_Mode_FatalError();
+            }
+        }
+    }
+
     void onEvent(const sapp_event& event)
     {
         simgui_handle_event(&event);
+        m_currentMode->handleEvent(event);
     }
 
     clock::time_point m_time = {};
 
     sg_pass_action m_defaultPassAction = {};
+
+    AppModePtr m_currentMode;
+    AppModePtr m_nextMode;
 };
 
 AppImpl* theApp;

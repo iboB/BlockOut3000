@@ -12,6 +12,15 @@ add_executable(${game}
     # game
     App.hpp
     App.cpp
+    AppModePtr.hpp
+    AppMode.hpp
+    AppMode.cpp
+
+    # modes
+    ModeFatalError.hpp
+    ModeFatalError.cpp
+    ModeExperimental.hpp
+    ModeExperimental.cpp
 )
 
 target_link_libraries(${game}

@@ -7,4 +7,8 @@
 //
 #pragma once
 
-#include "AppModePtr.hpp"
+#include <chrono>
+#include <cstdint>
+
+using ms_t = std::chrono::duration<uint32_t, std::milli>;
+using sec_t = std::chrono::duration<float>;

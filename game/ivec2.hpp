@@ -7,4 +7,6 @@
 //
 #pragma once
 
-#include "AppModePtr.hpp"
+#include <yama/vector2.hpp>
+
+using ivec2 = yama::vector2_t<int>;
