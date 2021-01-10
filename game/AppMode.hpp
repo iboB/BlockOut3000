@@ -9,7 +9,7 @@
 
 #include "Time.hpp"
 
-#include "ivec2.hpp"
+#include "vec2.hpp"
 
 extern "C" struct sapp_event;
 

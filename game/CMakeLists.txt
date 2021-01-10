@@ -9,12 +9,16 @@ add_executable(${game}
     sokol-imgui.hpp
     sokol-imgui.cpp
 
-    # game
+    # app
     App.hpp
     App.cpp
     AppModePtr.hpp
     AppMode.hpp
     AppMode.cpp
+
+    # game
+    BlockTemplate.hpp
+    BlockTemplate.cpp
 
     # modes
     ModeFatalError.hpp
