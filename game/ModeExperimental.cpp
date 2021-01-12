@@ -8,7 +8,7 @@
 #include "ModeExperimental.hpp"
 #include "AppMode.hpp"
 
-#include "imgui.hpp"
+#include "lib/imgui.hpp"
 
 namespace
 {

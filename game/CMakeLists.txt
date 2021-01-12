@@ -16,6 +16,8 @@ add_executable(${game}
     AppModePtr.hpp
     AppMode.hpp
     AppMode.cpp
+    Renderer.hpp
+    Renderer.cpp
 
     # game
     BlockTemplate.hpp

@@ -7,13 +7,13 @@
 //
 #include "App.hpp"
 
-#include "Time.hpp"
 #include "AppMode.hpp"
 
 #include "ModeFatalError.hpp"
 #include "ModeExperimental.hpp"
 
-#include "sokol-imgui.hpp"
+#include "lib/Time.hpp"
+#include "lib/sokol-imgui.hpp"
 
 #include <yama/vector4.hpp>
 

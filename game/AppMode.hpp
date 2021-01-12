@@ -7,9 +7,9 @@
 //
 #pragma once
 
-#include "Time.hpp"
+#include "lib/Time.hpp"
 
-#include "vec2.hpp"
+#include "lib/vec2.hpp"
 
 extern "C" struct sapp_event;
 
