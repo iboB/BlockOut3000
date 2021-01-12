@@ -1,13 +1,14 @@
 set(game BlockOut3000)
 add_executable(${game}
     # sokol and imgui
-    imgui.hpp
-    sokol-app.h
-    sokol-gfx.h
-    sokol-impl.h
-    sokol-impl.c
-    sokol-imgui.hpp
-    sokol-imgui.cpp
+    lib/imgui.hpp
+    lib/sokol-app.h
+    lib/sokol-gfx.h
+    lib/sokol-impl.h
+    lib/sokol-impl.c
+    lib/sokol-imgui.hpp
+    lib/sokol-imgui.cpp
+    lib/glsl-prefix.h
 
     # app
     App.hpp
