@@ -7,10 +7,15 @@
 //
 #pragma once
 
+#include "lib/sokol-gfx.h"
+
 class Renderer
 {
 public:
     Renderer();
     ~Renderer();
-    bool init();
+    void init();
+
+private:
+    sg_shader m_shader = {};
 };
