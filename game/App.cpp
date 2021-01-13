@@ -12,6 +12,8 @@
 #include "ModeFatalError.hpp"
 #include "ModeExperimental.hpp"
 
+#include "Renderer.hpp"
+
 #include "lib/Time.hpp"
 #include "lib/sokol-imgui.hpp"
 
@@ -30,11 +32,6 @@ public:
         m_time = clock::now();
 
         {
-            sg_desc desc = {};
-            sg_setup(&desc);
-        }
-
-        {
             m_defaultPassAction.colors[0].action = SG_ACTION_CLEAR;
             yama::vector4::attach_to_ptr(m_defaultPassAction.colors[0].val) = {0.2f, 0.4f, 0.2f, 1.0f};
             m_defaultPassAction.depth.action = SG_ACTION_CLEAR;
@@ -47,13 +44,14 @@ public:
             simgui_setup(&desc);
         }
 
+        m_renderer.init();
+
         m_nextMode = Make_Mode_Experimental();
     }
 
     ~AppImpl()
     {
         simgui_shutdown();
-        sg_shutdown();
     }
 
     void frame()
@@ -127,6 +125,8 @@ public:
 
     sg_pass_action m_defaultPassAction = {};
 
+    Renderer m_renderer;
+
     AppModePtr m_currentMode;
     AppModePtr m_nextMode;
 };
@@ -143,6 +143,11 @@ extern sapp_desc sokol_main(int, char*[])
     sapp_desc desc = {};
 
     desc.init_cb = []() {
+        {
+            sg_desc desc = {};
+            sg_setup(&desc);
+        }
+
         theApp = new AppImpl;
         theApp->init();
     };
@@ -152,6 +157,7 @@ extern sapp_desc sokol_main(int, char*[])
     desc.cleanup_cb = []() {
         delete theApp;
         theApp = nullptr;
+        sg_shutdown();
     };
     desc.event_cb = [](const sapp_event* event) {
         theApp->onEvent(*event);

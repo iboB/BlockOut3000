@@ -27,3 +27,15 @@ const char* FRAG_SRC =
         }
     )glsl";
 }
+
+Renderer::Renderer() {
+
+}
+
+Renderer::~Renderer() {
+
+}
+
+bool Renderer::init() {
+
+}
