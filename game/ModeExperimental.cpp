@@ -27,7 +27,7 @@ class ModeExperimental : public AppMode
 };
 }
 
-AppModePtr Make_Mode_Experimental()
+AppModePtr MakeMode_Experimental()
 {
     return std::make_unique<ModeExperimental>();
 }

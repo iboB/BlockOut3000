@@ -9,4 +9,4 @@
 
 #include "AppModePtr.hpp"
 
-AppModePtr Make_Mode_Experimental();
+AppModePtr MakeMode_Experimental();

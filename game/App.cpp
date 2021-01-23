@@ -46,7 +46,7 @@ public:
 
         m_renderer.init();
 
-        m_nextMode = Make_Mode_Experimental();
+        m_nextMode = MakeMode_Experimental();
     }
 
     ~AppImpl()
