@@ -10,17 +10,19 @@
 #include "Primitives.hpp"
 #include <vector>
 
-class CubeTemplate
+class Cube
 {
 public:
-    CubeTemplate();
-    ~CubeTemplate();
+    static Cube& instance();
 
     const std::vector<LineSegment>& wireSegments() const { return m_wireSegments; }
     const std::vector<LineSegment>& wideWireSegments() const { return m_wideWireSegments; }
     const std::vector<Triangle>& triangles() const { return m_triangles; }
 
 private:
+    Cube();
+    ~Cube();
+
     std::vector<LineSegment> m_wireSegments;
 
     // a helper array of segments which are a tiny bit bigger in order to draw them

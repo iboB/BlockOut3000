@@ -16,6 +16,10 @@ public:
     ~Renderer();
     void init();
 
+    sg_pipeline solidTrisPipeline() const { return m_solidTrisPipeline; }
+
 private:
     sg_shader m_shader = {};
+
+    sg_pipeline m_solidTrisPipeline;
 };
