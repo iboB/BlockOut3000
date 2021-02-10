@@ -66,7 +66,7 @@ void Renderer::init() {
     }
 
     {
-        sg_pipeline_desc desc;
+        sg_pipeline_desc desc = {};
         desc.layout.buffers[0].stride = sizeof(Vertex);
 
         auto& attrs = desc.layout.attrs;
