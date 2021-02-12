@@ -75,11 +75,11 @@ void Renderer::init() {
 
         desc.shader = m_shader;
         desc.index_type = SG_INDEXTYPE_UINT16;
-        desc.blend.enabled = false;
-        desc.rasterizer.face_winding = SG_FACEWINDING_CCW;
-        desc.rasterizer.cull_mode = SG_CULLMODE_BACK;
-        desc.depth_stencil.depth_compare_func = SG_COMPAREFUNC_LESS_EQUAL;
-        desc.depth_stencil.depth_write_enabled = true;
+        desc.cull_mode = SG_CULLMODE_BACK;
+        desc.face_winding = SG_FACEWINDING_CCW;
+
+        desc.depth.compare = SG_COMPAREFUNC_LESS_EQUAL;
+        desc.depth.write_enabled = true;
 
         m_solidTrisPipeline = sg_make_pipeline(&desc);
     }
