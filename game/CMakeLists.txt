@@ -20,6 +20,8 @@ add_executable(${game}
     Renderer.cpp
 
     # game
+    Cube.hpp
+    Cube.cpp
     # BlockPrimitives.hpp
     BlockBuilder.hpp
     BlockBuilder.cpp

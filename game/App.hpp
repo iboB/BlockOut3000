@@ -8,3 +8,11 @@
 #pragma once
 
 #include "AppModePtr.hpp"
+
+class Renderer;
+
+class App
+{
+public:
+    static Renderer& r();
+};

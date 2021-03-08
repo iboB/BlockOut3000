@@ -1,21 +1,16 @@
 // BlockOut 3000
-// Copyright(c) 2018 Borislav Stanimirov
+// Copyright(c) 2017-2021 Borislav Stanimirov
 //
 // Distributed under the MIT Software License
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "CubeTemplate.hpp"
+#include "Cube.hpp"
 
-using namespace Magnum;
-
-static Vector3 v(float x, float y, float z)
+Cube::Cube()
 {
-    return { x, y, z };
-}
+    using yama::v;
 
-CubeTemplate::CubeTemplate()
-{
     m_wireSegments = {
         // bottom
         { v(0, 0, 0), v(1, 0, 0) },
@@ -23,7 +18,7 @@ CubeTemplate::CubeTemplate()
         { v(0, 0, 0), v(0, 1, 0) },
         { v(1, 0, 0), v(1, 1, 0) },
 
-        // tp
+        // top
         { v(0, 0, 1), v(1, 0, 1) },
         { v(0, 1, 1), v(1, 1, 1) },
         { v(0, 0, 1), v(0, 1, 1) },
@@ -88,4 +83,10 @@ CubeTemplate::CubeTemplate()
     };
 }
 
-CubeTemplate::~CubeTemplate() = default;
+Cube::~Cube() = default;
+
+Cube& Cube::instance()
+{
+    static Cube cube;
+    return cube;
+}

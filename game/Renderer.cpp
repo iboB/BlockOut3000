@@ -53,7 +53,7 @@ void Renderer::init() {
         vub.uniforms[0].name = "u_projView";
         vub.uniforms[0].type = SG_UNIFORMTYPE_MAT4;
 
-        auto& fub = desc.vs.uniform_blocks[0];
+        auto& fub = desc.fs.uniform_blocks[0];
         fub.size = sizeof(yama::vector4);
         fub.uniforms[0].name = "u_color";
         fub.uniforms[0].type = SG_UNIFORMTYPE_FLOAT4;
@@ -74,7 +74,7 @@ void Renderer::init() {
         attrs[0].format = SG_VERTEXFORMAT_FLOAT3;
 
         desc.shader = m_shader;
-        desc.index_type = SG_INDEXTYPE_UINT16;
+        desc.index_type = SG_INDEXTYPE_NONE;
         desc.cull_mode = SG_CULLMODE_BACK;
         desc.face_winding = SG_FACEWINDING_CCW;
 
