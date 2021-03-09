@@ -13,6 +13,7 @@
 #include "Renderer.hpp"
 
 #include "lib/imgui.hpp"
+#include "lib/sokol-app.h"
 
 #include <yama/vector4.hpp>
 #include <yama/matrix4x4.hpp>
@@ -45,13 +46,25 @@ class ModeExperimental : public AppMode
         b.vertex_buffers[0] = m_buf;
         sg_apply_bindings(&b);
 
-        auto pv = yama::matrix::identity();
+        auto proj = yama::matrix::perspective_fov_rh(yama::constants::PI_HALF, 1, 1, 100);
+        auto view = yama::matrix::look_at_rh({1, 1, 3.5f}, {1, 1, 0}, {0, 1, 0});
+        auto pv = proj * view;
         sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, SG_RANGE(pv));
 
         yama::vector4 color = {1, 0, 0, 1};
         sg_apply_uniforms(SG_SHADERSTAGE_FS, 0, SG_RANGE(color));
 
         sg_draw(0, Cube::instance().triangles().size() * 3, 1);
+    }
+
+    virtual bool handleEvent(const sapp_event& event)
+    {
+        if (event.type == SAPP_EVENTTYPE_KEY_UP && event.key_code == SAPP_KEYCODE_ESCAPE)
+        {
+            sapp_quit();
+            return true;
+        }
+        return false;
     }
 
     sg_buffer m_buf;
