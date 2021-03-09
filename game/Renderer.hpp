@@ -18,8 +18,11 @@ public:
 
     sg_pipeline solidTrisPipeline() const { return m_solidTrisPipeline; }
 
+    sg_pipeline wirePipeline() const { return m_wirePipeline; }
+
 private:
     sg_shader m_shader = {};
 
     sg_pipeline m_solidTrisPipeline;
+    sg_pipeline m_wirePipeline;
 };

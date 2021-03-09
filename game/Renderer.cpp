@@ -72,13 +72,22 @@ void Renderer::init()
         attrs[0].format = SG_VERTEXFORMAT_FLOAT3;
 
         desc.shader = m_shader;
+
         desc.index_type = SG_INDEXTYPE_NONE;
-        desc.cull_mode = SG_CULLMODE_BACK;
         desc.face_winding = SG_FACEWINDING_CCW;
 
         desc.depth.compare = SG_COMPAREFUNC_LESS_EQUAL;
         desc.depth.write_enabled = true;
 
+        ////////////////////////////////////////
+
+        desc.primitive_type = SG_PRIMITIVETYPE_LINES;
+        m_wirePipeline = sg_make_pipeline(&desc);
+
+        ////////////////////////////////////////
+
+        desc.primitive_type = SG_PRIMITIVETYPE_TRIANGLES;
+        desc.cull_mode = SG_CULLMODE_BACK;
         m_solidTrisPipeline = sg_make_pipeline(&desc);
     }
 }

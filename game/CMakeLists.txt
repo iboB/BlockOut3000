@@ -9,6 +9,9 @@ add_executable(${game}
     lib/sokol-imgui.hpp
     lib/sokol-imgui.cpp
     lib/glsl-prefix.h
+    lib/matrix.hpp
+    lib/Mesh.hpp
+    lib/Mesh.cpp
 
     # app
     App.hpp
@@ -27,6 +30,8 @@ add_executable(${game}
     BlockBuilder.cpp
     BlockTemplate.hpp
     BlockTemplate.cpp
+    Pit.hpp
+    Pit.cpp
 
     # modes
     ModeFatalError.hpp
