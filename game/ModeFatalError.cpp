@@ -23,7 +23,7 @@ class ModeFatalError : public AppMode
         ImGui::End();
     }
 };
-}
+} // namespace
 
 AppModePtr Make_Mode_FatalError()
 {

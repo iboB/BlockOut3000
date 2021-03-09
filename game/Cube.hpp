@@ -30,6 +30,5 @@ private:
     // with depth testing enabled while they still remain visible
     std::vector<LineSegment> m_wideWireSegments;
 
-
     std::vector<Triangle> m_triangles;
 };

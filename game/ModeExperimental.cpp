@@ -7,16 +7,16 @@
 //
 #include "ModeExperimental.hpp"
 
-#include "AppMode.hpp"
 #include "App.hpp"
+#include "AppMode.hpp"
 #include "Cube.hpp"
 #include "Renderer.hpp"
 
 #include "lib/imgui.hpp"
 #include "lib/sokol-app.h"
 
-#include <yama/vector4.hpp>
 #include <yama/matrix4x4.hpp>
+#include <yama/vector4.hpp>
 
 namespace
 {
@@ -35,9 +35,7 @@ class ModeExperimental : public AppMode
         return true;
     }
 
-    virtual void update(ms_t) override
-    {
-    }
+    virtual void update(ms_t) override {}
 
     virtual void defaultRender(ivec2 windowSize) override
     {
@@ -69,7 +67,7 @@ class ModeExperimental : public AppMode
 
     sg_buffer m_buf;
 };
-}
+} // namespace
 
 AppModePtr MakeMode_Experimental()
 {

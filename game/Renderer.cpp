@@ -15,19 +15,18 @@
 
 #include <cstddef>
 
-Renderer::Renderer() {
+Renderer::Renderer() {}
 
-}
-
-Renderer::~Renderer() {
+Renderer::~Renderer()
+{
     sg_destroy_pipeline(m_solidTrisPipeline);
     sg_destroy_shader(m_shader);
 }
 
-void Renderer::init() {
+void Renderer::init()
+{
     {
-        const char* vert_src =
-            GLSL_VERT_PREFIX
+        const char* vert_src = GLSL_VERT_PREFIX
             R"glsl(
             uniform mat4 u_projView;
             in vec4 a_position;
@@ -36,8 +35,7 @@ void Renderer::init() {
             }
             )glsl";
 
-        const char* frag_src =
-            GLSL_FRAG_PREFIX
+        const char* frag_src = GLSL_FRAG_PREFIX
             R"glsl(
             uniform vec4 u_color;
             out vec4 frag_color;

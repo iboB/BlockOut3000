@@ -9,8 +9,8 @@
 
 #include "AppMode.hpp"
 
-#include "ModeFatalError.hpp"
 #include "ModeExperimental.hpp"
+#include "ModeFatalError.hpp"
 
 #include "Renderer.hpp"
 
@@ -49,10 +49,7 @@ public:
         m_nextMode = MakeMode_Experimental();
     }
 
-    ~AppImpl()
-    {
-        simgui_shutdown();
-    }
+    ~AppImpl() { simgui_shutdown(); }
 
     void frame()
     {
@@ -75,7 +72,7 @@ public:
         auto dtms = std::chrono::duration_cast<ms_t>(dt);
         m_currentMode->update(dtms);
 
-        //ImGui::ShowDemoWindow();
+        // ImGui::ShowDemoWindow();
 
         sg_begin_default_pass(&m_defaultPassAction, w, h);
         m_currentMode->defaultRender({w, h});
@@ -108,10 +105,7 @@ public:
                 ++fails;
             }
 
-            if (fails == 5 || !m_nextMode)
-            {
-                m_nextMode = Make_Mode_FatalError();
-            }
+            if (fails == 5 || !m_nextMode) { m_nextMode = Make_Mode_FatalError(); }
         }
     }
 
@@ -133,46 +127,42 @@ public:
 
 AppImpl* theApp;
 
-}
+} // namespace
 
 Renderer& App::r()
 {
     return theApp->m_renderer;
 }
 
-extern "C" {
-
-extern sapp_desc sokol_main(int, char*[])
+extern "C"
 {
-    sapp_desc desc = {};
+    extern sapp_desc sokol_main(int, char*[])
+    {
+        sapp_desc desc = {};
 
-    desc.init_cb = []() {
-        {
-            sg_desc desc = {};
-            sg_setup(&desc);
-        }
+        desc.init_cb = []() {
+            {
+                sg_desc desc = {};
+                sg_setup(&desc);
+            }
 
-        theApp = new AppImpl;
-        theApp->init();
-    };
-    desc.frame_cb = []() {
-        theApp->frame();
-    };
-    desc.cleanup_cb = []() {
-        delete theApp;
-        theApp = nullptr;
-        sg_shutdown();
-    };
-    desc.event_cb = [](const sapp_event* event) {
-        theApp->onEvent(*event);
-    };
+            theApp = new AppImpl;
+            theApp->init();
+        };
+        desc.frame_cb = []() { theApp->frame(); };
+        desc.cleanup_cb = []() {
+            delete theApp;
+            theApp = nullptr;
+            sg_shutdown();
+        };
+        desc.event_cb = [](const sapp_event* event) { theApp->onEvent(*event); };
 
-    desc.width = 1400;
-    desc.height = 900;
-    desc.window_title = "BlockOut 3000";
+        desc.width = 1400;
+        desc.height = 900;
+        desc.window_title = "BlockOut 3000";
 
-    desc.enable_clipboard = true;
+        desc.enable_clipboard = true;
 
-    return desc;
-}
+        return desc;
+    }
 }
