@@ -3,6 +3,8 @@
 #include "Vertex.hpp"
 #include "Renderer.hpp"
 
+#include "lib/sokol-gfx-utils.hpp"
+
 #include <vector>
 
 Pit::Pit(ivec3 size)
@@ -21,10 +23,10 @@ void Pit::draw(Renderer& r)
         b.vertex_buffers[0] = m_solid.vb;
         sg_apply_bindings(&b);
 
-        sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, SG_RANGE(m_projView));
+        sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, sg_make_range(m_projView));
 
         yama::vector4 solidColor = {0.066f, 0.066f, 0.15f, 1};
-        sg_apply_uniforms(SG_SHADERSTAGE_FS, 0, SG_RANGE(solidColor));
+        sg_apply_uniforms(SG_SHADERSTAGE_FS, 0, sg_make_range(solidColor));
 
         sg_draw(0, m_solid.numElements, 1);
     }
@@ -35,10 +37,10 @@ void Pit::draw(Renderer& r)
         b.vertex_buffers[0] = m_wire.vb;
         sg_apply_bindings(&b);
 
-        sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, SG_RANGE(m_projView));
+        sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, sg_make_range(m_projView));
 
         yama::vector4 wireColor = {0.13f, 0.30f, 0.15f, 1};
-        sg_apply_uniforms(SG_SHADERSTAGE_FS, 0, SG_RANGE(wireColor));
+        sg_apply_uniforms(SG_SHADERSTAGE_FS, 0, sg_make_range(wireColor));
 
         sg_draw(0, m_wire.numElements, 1);
     }

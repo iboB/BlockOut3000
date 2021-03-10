@@ -1,8 +1,8 @@
 #pragma once
 
-#include "lib/vec3.hpp"
-#include "lib/matrix.hpp"
 #include "lib/Mesh.hpp"
+#include "lib/matrix.hpp"
+#include "lib/vec3.hpp"
 
 class Renderer;
 
@@ -13,6 +13,8 @@ public:
     ~Pit();
 
     void draw(Renderer& r);
+
+    const matrix& projView() const { return m_projView; }
 
 private:
     // logical data

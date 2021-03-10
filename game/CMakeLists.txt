@@ -38,7 +38,7 @@ add_executable(${game}
     ModeFatalError.cpp
     ModeExperimental.hpp
     ModeExperimental.cpp
-)
+ "lib/sokol-gfx-utils.hpp")
 
 target_link_libraries(${game}
     itlib
