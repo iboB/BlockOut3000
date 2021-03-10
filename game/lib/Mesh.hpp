@@ -18,14 +18,7 @@ struct Mesh
         other.vb.id = SG_INVALID_ID;
         other.numElements = 0;
     }
-    Mesh& operator=(Mesh&& other)
-    {
-        vb = other.vb;
-        numElements = other.numElements;
-        other.vb.id = SG_INVALID_ID;
-        other.numElements = 0;
-        return *this;
-    }
+    Mesh& operator=(Mesh&& other);
     ~Mesh();
 
     sg_buffer vb = {SG_INVALID_ID};
@@ -34,18 +27,19 @@ struct Mesh
     template <typename T, int N>
     static Mesh create(const T (&data)[N])
     {
-        sg_buffer_desc desc = {};
-        desc.data.ptr = data;
-        desc.data.size = sizeof(T) * N;
-        return Mesh(sg_make_buffer(desc), N);
+        return create(data, sizeof(T) * N, N);
     }
 
     template <typename Container>
     static Mesh create(const Container& c)
     {
-        sg_buffer_desc desc = {};
-        desc.data.ptr = c.data();
-        desc.data.size = c.size() * sizeof(typename Container::value_type);
-        return Mesh(sg_make_buffer(desc), int(c.size()));
+        return create(c.data(), c.size() * sizeof(typename Container::value_type), int(c.size()));
     }
+
+    void destroy();
+
+    bool valid() const { return vb.id == SG_INVALID_ID; }
+
+private:
+    static Mesh create(const void* buf, size_t bufSize, int numElements);    
 };
