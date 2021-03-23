@@ -82,12 +82,27 @@ void Renderer::init()
         ////////////////////////////////////////
 
         desc.primitive_type = SG_PRIMITIVETYPE_LINES;
-        m_wirePipeline = sg_make_pipeline(&desc);
+        m_wirePipeline = sg_make_pipeline(desc);
 
         ////////////////////////////////////////
 
         desc.primitive_type = SG_PRIMITIVETYPE_TRIANGLES;
         desc.cull_mode = SG_CULLMODE_BACK;
-        m_solidTrisPipeline = sg_make_pipeline(&desc);
+        m_solidTrisPipeline = sg_make_pipeline(desc);
+
+        ////////////////////////////////////////
+
+        desc.depth.write_enabled = false;
+        auto& blend = desc.colors->blend;
+        blend.enabled = true;
+        blend.src_factor_rgb = blend.src_factor_alpha = SG_BLENDFACTOR_SRC_ALPHA;
+        blend.dst_factor_rgb = blend.dst_factor_alpha = SG_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
+
+        m_alphaFrontPipeline = sg_make_pipeline(desc);
+
+        ////////////////////////////////////////
+        desc.cull_mode = SG_CULLMODE_FRONT;
+
+        m_alphaBackPipeline = sg_make_pipeline(desc);
     }
 }

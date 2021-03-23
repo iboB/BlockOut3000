@@ -1,10 +1,11 @@
 #include "Pit.hpp"
 
-#include "Vertex.hpp"
 #include "Renderer.hpp"
+#include "Vertex.hpp"
 
 #include "lib/sokol-gfx-utils.hpp"
 
+#include <itlib/memory_view.hpp>
 #include <vector>
 
 Pit::Pit(ivec3 size)
@@ -45,6 +46,23 @@ void Pit::draw(Renderer& r)
         sg_draw(0, m_wire.numElements, 1);
     }
 }
+
+namespace
+{
+void scalePitVertices(itlib::memory_view<Vertex> vertices, float epsilon)
+{
+    for (auto& v : vertices)
+    {
+        for (auto& coord : v.pos)
+        {
+            if (coord)
+                coord += epsilon;
+            else
+                coord -= epsilon;
+        }
+    }
+}
+} // namespace
 
 void Pit::createBuffers()
 {
@@ -103,19 +121,9 @@ void Pit::createBuffers()
     };
 
     // make the pit box just a tiny bit larger, so that it doesn't z-fight the wires
-    for (auto& v : solidVertices)
-    {
-        for (auto& coord : v.pos)
-        {
-            if (coord)
-                coord += 0.01f;
-            else
-                coord -= 0.01f;
-        }
-    }
-
+    static constexpr float EPS = 0.02f;
+    scalePitVertices(itlib::memory_view(solidVertices, std::size(solidVertices)), EPS);
     m_solid = Mesh::create(solidVertices);
-
 
     std::vector<Vertex> wireVertices;
     wireVertices.reserve(2 * 3 * (m_size.x + 1) + 2 * 3 * (m_size.y + 1) + 2 * 4 * (m_size.z + 1));
@@ -141,5 +149,6 @@ void Pit::createBuffers()
         wireVertices.insert(wireVertices.end(), {{0, h, d}, {0, h, 0}, {0, h, 0}, {w, h, 0}, {w, h, 0}, {w, h, d}});
     }
 
+    scalePitVertices(itlib::make_memory_view(wireVertices), EPS / 2);
     m_wire = Mesh::create(wireVertices);
 }

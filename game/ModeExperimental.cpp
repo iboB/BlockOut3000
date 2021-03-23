@@ -104,7 +104,21 @@ public:
         m_pit.draw(r);
 
         {
-            sg_apply_pipeline(r.solidTrisPipeline());
+            sg_apply_pipeline(r.alphaBackPipeline());
+            sg_bindings b = {};
+            b.vertex_buffers[0] = m_blockSolid.vb;
+            sg_apply_bindings(&b);
+
+            sg_apply_uniforms(SG_SHADERSTAGE_VS, 0, sg_make_range(m_pit.projView()));
+
+            yama::vector4 solidColor = {0.9f, 0.5f, 0.5f, 0.1f};
+            sg_apply_uniforms(SG_SHADERSTAGE_FS, 0, sg_make_range(solidColor));
+
+            sg_draw(0, m_blockSolid.numElements, 1);
+        }
+
+        {
+            sg_apply_pipeline(r.alphaFrontPipeline());
             sg_bindings b = {};
             b.vertex_buffers[0] = m_blockSolid.vb;
             sg_apply_bindings(&b);
