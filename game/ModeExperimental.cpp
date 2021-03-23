@@ -32,7 +32,7 @@ public:
     ModeExperimental()
         : m_pit({5, 5, 5})
     {
-        m_blockElements = {{1, 0}, {1, 1}, {1, 2}, {2, 2}};
+        m_blockElements = {{1, 0, 0}, {1, 1, 0}, {1, 2, 0}, {2, 2, 0}};
         recreateBlock();
     }
 
@@ -97,7 +97,7 @@ public:
 
     virtual void update(ms_t) override {}
 
-    virtual void defaultRender(ivec2 windowSize) override
+    virtual void defaultRender(ivec2) override
     {
         auto& r = App::r();
 
