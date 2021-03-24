@@ -13,10 +13,11 @@
 #include "LayoutExperimental.hpp"
 
 #include "lib/imgui.hpp"
+#include "lib/sokol-app.h"
 
 namespace
 {
-class ModeLayoutTest : public AppMode
+class ModeLayoutTest final : public AppMode
 {
 public:
     ModeLayoutTest()
@@ -39,6 +40,16 @@ public:
             ImGui::Begin(elem->name.c_str());
             ImGui::End();
         }
+    }
+
+    virtual bool handleEvent(const sapp_event& event) override
+    {
+        if (event.type == SAPP_EVENTTYPE_KEY_UP && event.key_code == SAPP_KEYCODE_ESCAPE)
+        {
+            sapp_quit();
+            return true;
+        }
+        return false;
     }
 
     std::vector<std::unique_ptr<GUILayout>> m_layouts;
