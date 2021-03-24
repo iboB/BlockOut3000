@@ -7,7 +7,6 @@
 //
 #pragma once
 
-#include <yama/vector2.hpp>
+#include "AppModePtr.hpp"
 
-using ivec2 = yama::vector2_t<int>;
-using vec2 = yama::vector2_t<float>;
+AppModePtr MakeMode_LayoutTest();

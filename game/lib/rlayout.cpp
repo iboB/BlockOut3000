@@ -5,9 +5,5 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#pragma once
-
-#include <yama/vector2.hpp>
-
-using ivec2 = yama::vector2_t<int>;
-using vec2 = yama::vector2_t<float>;
+#define LAY_IMPLEMENTATION
+#include "rlayout.hpp"

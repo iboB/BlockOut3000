@@ -12,6 +12,7 @@
 #include "ModeExperimental.hpp"
 #include "ModeBlockBuilder.hpp"
 #include "ModeFatalError.hpp"
+#include "ModeLayoutTest.hpp"
 
 #include "Renderer.hpp"
 
@@ -47,7 +48,7 @@ public:
 
         m_renderer.init();
 
-        m_nextMode = MakeMode_BlockBuilder();
+        m_nextMode = MakeMode_LayoutTest();
     }
 
     ~AppImpl() { simgui_shutdown(); }

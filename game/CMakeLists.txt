@@ -13,6 +13,10 @@ add_executable(${game}
     lib/matrix.hpp
     lib/Mesh.hpp
     lib/Mesh.cpp
+    "lib/GUILayout.hpp"
+    "lib/GUILayout.cpp"
+    "lib/rlayout.hpp"
+    "lib/rlayout.cpp"
 
     # app
     App.hpp
@@ -43,6 +47,10 @@ add_executable(${game}
     ModeExperimental.cpp
     "ModeBlockBuilder.hpp"
     "ModeBlockBuilder.cpp"
+    "LayoutExperimental.hpp"
+    "LayoutExperimental.cpp"
+    "ModeLayoutTest.hpp"
+    "ModeLayoutTest.cpp"
 )
 
 target_link_libraries(${game}
@@ -50,4 +58,5 @@ target_link_libraries(${game}
     yama
     sokol
     imgui
+    rlayout
 )

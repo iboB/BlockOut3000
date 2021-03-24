@@ -54,6 +54,7 @@ dep(itlib)
 dep(yama)
 dep(imgui)
 dep(sokol)
+dep(rlayout)
 
 # subdirs
 add_subdirectory(game)

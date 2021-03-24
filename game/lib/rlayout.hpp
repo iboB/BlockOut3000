@@ -7,7 +7,4 @@
 //
 #pragma once
 
-#include <yama/vector2.hpp>
-
-using ivec2 = yama::vector2_t<int>;
-using vec2 = yama::vector2_t<float>;
+#include <layout.h>
