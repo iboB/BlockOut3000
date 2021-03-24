@@ -28,10 +28,10 @@ void Renderer::init()
     {
         const char* vert_src = GLSL_VERT_PREFIX
             R"glsl(
-            uniform mat4 u_projView;
+            uniform mat4 u_projViewModel;
             in vec4 a_position;
             void main() {
-                gl_Position = u_projView * a_position;
+                gl_Position = u_projViewModel * a_position;
             }
             )glsl";
 
@@ -48,7 +48,7 @@ void Renderer::init()
 
         auto& vub = desc.vs.uniform_blocks[0];
         vub.size = sizeof(yama::matrix);
-        vub.uniforms[0].name = "u_projView";
+        vub.uniforms[0].name = "u_projViewModel";
         vub.uniforms[0].type = SG_UNIFORMTYPE_MAT4;
 
         auto& fub = desc.fs.uniform_blocks[0];

@@ -8,12 +8,22 @@
 #pragma once
 
 #include "lib/vec3.hpp"
+#include "lib/Mesh.hpp"
 
 #include <vector>
+#include <string>
+#include <cstdint>
 
 class BlockTemplate
 {
 public:
 private:
+    // logical data
+    std::string m_name;
     std::vector<ivec3> m_elements;
+    uint32_t m_grid;
+
+    // physical data
+    Mesh m_solid;
+    Mesh m_wire;
 };

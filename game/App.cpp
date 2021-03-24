@@ -10,6 +10,7 @@
 #include "AppMode.hpp"
 
 #include "ModeExperimental.hpp"
+#include "ModeBlockBuilder.hpp"
 #include "ModeFatalError.hpp"
 
 #include "Renderer.hpp"
@@ -46,7 +47,7 @@ public:
 
         m_renderer.init();
 
-        m_nextMode = MakeMode_Experimental();
+        m_nextMode = MakeMode_BlockBuilder();
     }
 
     ~AppImpl() { simgui_shutdown(); }

@@ -4,6 +4,7 @@ add_executable(${game}
     lib/imgui.hpp
     lib/sokol-app.h
     lib/sokol-gfx.h
+    lib/sokol-gfx-utils.hpp
     lib/sokol-impl.h
     lib/sokol-impl.c
     lib/sokol-imgui.hpp
@@ -25,7 +26,9 @@ add_executable(${game}
     # game
     Cube.hpp
     Cube.cpp
-    # BlockPrimitives.hpp
+    Primitives.hpp
+    BlockDefinition.hpp
+    BlockDefinition.cpp
     BlockBuilder.hpp
     BlockBuilder.cpp
     BlockTemplate.hpp
@@ -38,7 +41,9 @@ add_executable(${game}
     ModeFatalError.cpp
     ModeExperimental.hpp
     ModeExperimental.cpp
- "lib/sokol-gfx-utils.hpp")
+    "ModeBlockBuilder.hpp"
+    "ModeBlockBuilder.cpp"
+)
 
 target_link_libraries(${game}
     itlib
