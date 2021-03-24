@@ -51,7 +51,7 @@ add_executable(${game}
     "LayoutExperimental.cpp"
     "ModeLayoutTest.hpp"
     "ModeLayoutTest.cpp"
-)
+ "LayoutBlockBuilder.hpp" "LayoutBlockBuilder.cpp")
 
 target_link_libraries(${game}
     itlib
