@@ -13,7 +13,7 @@ GUILayout::GUILayout()
 {
     lay_init_context(&m_lctx);
     lay_reserve_items_capacity(&m_lctx, 16);
-    m_root = lay_item(&m_lctx);
+    m_root = item();
 }
 
 GUILayout::~GUILayout()
@@ -52,7 +52,7 @@ void GUILayout::resetContext()
 {
     lay_reset_context(&m_lctx);
     m_namedElements.clear();
-    m_root = lay_item(&m_lctx);
+    m_root = item();
     lay_set_size_xy(&m_lctx, m_root, lay_scalar(m_size.x), lay_scalar(m_size.y));
 }
 
