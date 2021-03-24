@@ -26,7 +26,7 @@
 
 namespace
 {
-class ModeExperimental : public AppMode
+class ModeExperimental final : public AppMode
 {
 public:
     ModeExperimental()
@@ -146,7 +146,7 @@ public:
         }
     }
 
-    virtual bool handleEvent(const sapp_event& event)
+    virtual bool handleEvent(const sapp_event& event) override
     {
         if (event.type == SAPP_EVENTTYPE_KEY_UP && event.key_code == SAPP_KEYCODE_ESCAPE)
         {

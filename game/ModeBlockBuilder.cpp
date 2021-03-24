@@ -12,7 +12,7 @@
 
 namespace
 {
-class ModeBlockBuilder : public AppMode
+class ModeBlockBuilder final : public AppMode
 {
 public:
     ModeBlockBuilder() {}
@@ -25,7 +25,7 @@ public:
 
     virtual void defaultRender(ivec2) override {}
 
-    virtual bool handleEvent(const sapp_event& event) { return false; }
+    virtual bool handleEvent(const sapp_event& event) override { return false; }
 };
 } // namespace
 
