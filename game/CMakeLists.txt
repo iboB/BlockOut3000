@@ -51,7 +51,7 @@ add_executable(${game}
     "LayoutExperimental.cpp"
     "ModeLayoutTest.hpp"
     "ModeLayoutTest.cpp"
- "LayoutBlockBuilder.hpp" "LayoutBlockBuilder.cpp")
+ "LayoutBlockBuilder.hpp" "LayoutBlockBuilder.cpp" "lib/sokol-glue.h")
 
 target_link_libraries(${game}
     itlib

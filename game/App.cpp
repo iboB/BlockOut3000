@@ -18,6 +18,7 @@
 
 #include "lib/Time.hpp"
 #include "lib/sokol-imgui.hpp"
+#include "lib/sokol-glue.h"
 
 #include <yama/vector4.hpp>
 
@@ -150,6 +151,7 @@ extern "C"
         desc.init_cb = []() {
             {
                 sg_desc desc = {};
+                desc.context = sapp_sgcontext();
                 sg_setup(&desc);
             }
 
