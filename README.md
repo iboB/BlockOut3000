@@ -12,7 +12,7 @@ A small 3D puzzle game. A clone of the classic DOS game Blockout.
 
 The source code is distributed under the MIT Software License. See LICENSE.txt for further details or copy [here](http://opensource.org/licenses/MIT).
 
-Copyright &copy; 2017-2021 Borislav Stanimirov.
+Copyright &copy; 2017-2022 Borislav Stanimirov.
 
 ### Blockout
 
