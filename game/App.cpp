@@ -69,7 +69,12 @@ public:
         const int w = sapp_width();
         const int h = sapp_height();
 
-        simgui_new_frame(w, h, dtsec.count());
+        simgui_new_frame(simgui_frame_desc_t{
+            .width = w,
+            .height = h,
+            .delta_time = dtsec.count(),
+            .dpi_scale = sapp_dpi_scale()
+        });
 
         auto dtms = std::chrono::duration_cast<ms_t>(dt);
         m_currentMode->update(dtms);
