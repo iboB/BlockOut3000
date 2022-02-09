@@ -37,6 +37,8 @@ add_executable(${game}
     BlockBuilder.cpp
     BlockTemplate.hpp
     BlockTemplate.cpp
+    BlockManager.hpp
+    BlockManager.cpp
     Pit.hpp
     Pit.cpp
 
