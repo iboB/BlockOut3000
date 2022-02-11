@@ -1,4 +1,4 @@
-CPMAddPackage(gh:ocornut/imgui@1.86)
+CPMAddPackage(gh:ocornut/imgui@1.87)
 
 add_library(imgui STATIC
     ${imgui_SOURCE_DIR}/imgui.cpp

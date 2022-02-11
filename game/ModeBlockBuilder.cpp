@@ -25,7 +25,7 @@ public:
 
     virtual void defaultRender(ivec2) override {}
 
-    virtual bool handleEvent(const sapp_event& event) override { return false; }
+    virtual bool handleEvent(const sapp_event&) override { return false; }
 };
 } // namespace
 

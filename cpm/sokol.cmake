@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME sokol
     GITHUB_REPOSITORY floooh/sokol
-    GIT_TAG edd83be7ba2f18eec9ca44497a2c4b3acaa95b50
+    GIT_TAG 173f73e27c70a9ef91443aa292220cdad76493b1
 )
 
 add_library(sokol INTERFACE)
