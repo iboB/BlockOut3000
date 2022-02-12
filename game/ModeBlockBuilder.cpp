@@ -9,6 +9,9 @@
 
 #include "App.hpp"
 #include "AppMode.hpp"
+#include "LayoutBlockBuilder.hpp"
+
+#include "lib/imgui.hpp"
 
 namespace
 {
@@ -23,9 +26,26 @@ public:
 
     virtual void update(ms_t) override {}
 
-    virtual void defaultRender(ivec2) override {}
+    virtual void defaultRender(ivec2 windowSize) override
+    {
+        m_layout.update(windowSize);
+        auto& blockListBox = m_layout.blockList();
+        ImGui::SetNextWindowPos({float(blockListBox.topLeft.x), float(blockListBox.topLeft.y)});
+        ImGui::SetNextWindowSize({float(blockListBox.size.x), float(blockListBox.size.y)});
+        ImGui::Begin(blockListBox.name.c_str());
+
+        for (int i = 0; i < m_gridSize; ++i) {
+            ImGui::Text("Layer %d", i);
+            ImGui::NewLine();
+        }
+
+        ImGui::End();
+    }
 
     virtual bool handleEvent(const sapp_event&) override { return false; }
+
+    LayoutBlockBuilder m_layout;
+    int m_gridSize = 3;
 };
 } // namespace
 

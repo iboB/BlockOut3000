@@ -11,12 +11,15 @@
 
 class LayoutBlockBuilder final : public GUILayout
 {
+public:
     virtual const char* name() const override { return "block builder"; }
 
-    virtual void updateElements() override;
+    const NamedElement& blockList() const { return m_blocksList; }
 
+private:
+    virtual void updateElements() override;
     void createElements();
 
-    NamedElement m_leftColumn;
+    NamedElement m_blocksList;
     NamedElement m_right1, m_right2;
 };

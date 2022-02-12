@@ -17,13 +17,13 @@ void LayoutBlockBuilder::createElements()
     set_contain(m_root, LAY_ROW);
 
     {
-        m_leftColumn.name = "ColLeft";
+        m_blocksList.name = "ColLeft";
         auto id = item();
         set_size_xy(id, 300, 0);
         set_behave(id, LAY_VFILL);
         insert(m_root, id);
-        m_leftColumn.id = id;
-        registerNamedElement(m_leftColumn);
+        m_blocksList.id = id;
+        registerNamedElement(m_blocksList);
     }
 
     auto right = item();

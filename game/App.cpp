@@ -49,7 +49,7 @@ public:
 
         m_renderer.init();
 
-        m_nextMode = MakeMode_LayoutTest();
+        m_nextMode = MakeMode_BlockBuilder();
     }
 
     ~AppImpl() { simgui_shutdown(); }
