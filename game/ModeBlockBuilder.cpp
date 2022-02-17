@@ -34,8 +34,18 @@ public:
         ImGui::SetNextWindowSize({float(blockListBox.size.x), float(blockListBox.size.y)});
         ImGui::Begin(blockListBox.name.c_str());
 
-        for (int i = 0; i < m_gridSize; ++i) {
-            ImGui::Text("Layer %d", i);
+        bool b = false;
+        for (int z = 0; z < m_gridSize; ++z) {
+            ImGui::Text("Layer %d", z);
+            for (int y = 0; y < m_gridSize; ++y) {
+                for (int x = 0; x < m_gridSize; ++x) {
+                    ImGui::PushID(z*m_gridSize*m_gridSize + y*m_gridSize + x);
+                    ImGui::Checkbox("", &b);
+                    ImGui::SameLine();
+                    ImGui::PopID();
+                }
+                ImGui::NewLine();
+            }
             ImGui::NewLine();
         }
 
