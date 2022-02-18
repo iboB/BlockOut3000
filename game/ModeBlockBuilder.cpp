@@ -13,8 +13,40 @@
 
 #include "lib/imgui.hpp"
 
+#include <array>
+#include <optional>
+
 namespace
 {
+
+constexpr int MAX_GRID_SIZE = 5;
+
+struct BlockEData
+{
+    std::string name;
+    int gridSize = 1;
+    bool grid[MAX_GRID_SIZE*MAX_GRID_SIZE*MAX_GRID_SIZE] = {};
+};
+
+struct CurBlockEState
+{
+    BlockEData data;
+    struct HistoryItem
+    {
+        std::string label;
+        BlockEData data;
+    };
+    std::vector<HistoryItem> history;
+    size_t historyPointer = 0;
+};
+
+void ImGui_BeginLayoutWindow(const GUILayout::NamedElement& elem)
+{
+    ImGui::SetNextWindowPos({float(elem.topLeft.x), float(elem.topLeft.y)});
+    ImGui::SetNextWindowSize({float(elem.size.x), float(elem.size.y)});
+    ImGui::Begin(elem.name.c_str());
+}
+
 class ModeBlockBuilder final : public AppMode
 {
 public:
@@ -22,27 +54,41 @@ public:
 
     virtual const char* name() const override { return "Block Builder"; }
 
-    virtual bool init() override { return true; }
+    virtual bool init() override
+    {
+        m_curBlockEState.emplace();
+        m_curBlockEState->data.gridSize = 3;
+        return true;
+    }
 
-    virtual void update(ms_t, ivec2) override {}
-
-    virtual void defaultRender(ivec2 windowSize) override
+    virtual void update(ms_t, ivec2 windowSize) override
     {
         m_layout.update(windowSize);
-        auto& layersBox = m_layout.layers();
-        ImGui::SetNextWindowPos({float(layersBox.topLeft.x), float(layersBox.topLeft.y)});
-        ImGui::SetNextWindowSize({float(layersBox.size.x), float(layersBox.size.y)});
-        ImGui::Begin(layersBox.name.c_str());
 
-        bool b = false;
-        for (int z = 0; z < m_gridSize; ++z) {
+        if (!m_curBlockEState) return;
+        auto& curBlockData = m_curBlockEState->data;
+
+        ImGui_BeginLayoutWindow(m_layout.currentBlock());
+        ImGui::End();
+
+        ImGui_BeginLayoutWindow(m_layout.layers());
+
+        int i = 0;
+        for (int z = 0; z < curBlockData.gridSize; ++z)
+        {
             ImGui::Text("Layer %d", z);
-            for (int y = 0; y < m_gridSize; ++y) {
-                for (int x = 0; x < m_gridSize; ++x) {
-                    ImGui::PushID(z*m_gridSize*m_gridSize + y*m_gridSize + x);
-                    ImGui::Checkbox("", &b);
-                    ImGui::SameLine();
+            for (int y = 0; y < curBlockData.gridSize; ++y)
+            {
+                for (int x = 0; x < curBlockData.gridSize; ++x)
+                {
+                    ImGui::PushID(z*curBlockData.gridSize*curBlockData.gridSize + y*curBlockData.gridSize + x);
+                    if (ImGui::Checkbox("", &curBlockData.grid[i]))
+                    {
+                        m_curBlockGeometryDirty = true;
+                    }
                     ImGui::PopID();
+                    ImGui::SameLine();
+                    ++i;
                 }
                 ImGui::NewLine();
             }
@@ -50,12 +96,24 @@ public:
         }
 
         ImGui::End();
+
+        if (m_curBlockGeometryDirty)
+        {
+            recreateBlock();
+        }
     }
 
-    virtual bool handleEvent(const sapp_event&) override { return false; }
+    void recreateBlock()
+    {
+
+    }
 
     LayoutBlockBuilder m_layout;
-    int m_gridSize = 3;
+    std::optional<CurBlockEState> m_curBlockEState;
+
+    bool m_curBlockGeometryDirty = false;
+
+
 };
 } // namespace
 
