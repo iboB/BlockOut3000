@@ -16,14 +16,29 @@ void LayoutBlockBuilder::createElements()
 {
     set_contain(m_root, LAY_ROW);
 
+    auto left = item();
+    set_size_xy(left, 200, 0);
+    set_behave(left, LAY_VFILL);
+    set_contain(left, LAY_COLUMN);
+    insert(m_root, left);
+
     {
-        m_blocksList.name = "ColLeft";
+        m_currentBlock.name = "Block";
         auto id = item();
-        set_size_xy(id, 300, 0);
-        set_behave(id, LAY_VFILL);
-        insert(m_root, id);
-        m_blocksList.id = id;
-        registerNamedElement(m_blocksList);
+        set_size_xy(id, 0, 300);
+        set_behave(id, LAY_HFILL);
+        insert(left, id);
+        m_currentBlock.id = id;
+        registerNamedElement(m_currentBlock);
+    }
+
+    {
+        m_layers.name = "Layers";
+        auto id = item();
+        set_behave(id, LAY_HFILL | LAY_VFILL);
+        insert(left, id);
+        m_layers.id = id;
+        registerNamedElement(m_layers);
     }
 
     auto right = item();

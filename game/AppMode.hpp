@@ -21,7 +21,7 @@ public:
     virtual const char* name() const = 0;
 
     virtual bool init();
-    virtual void update(ms_t dt);
+    virtual void update(ms_t dt, ivec2 windowSize);
     virtual void defaultRender(ivec2 windowSize);
     virtual bool handleEvent(const sapp_event& event);
 };

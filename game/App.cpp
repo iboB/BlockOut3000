@@ -49,7 +49,7 @@ public:
 
         m_renderer.init();
 
-        m_nextMode = MakeMode_BlockBuilder();
+        m_nextMode = MakeMode_LayoutTest();
     }
 
     ~AppImpl() { simgui_shutdown(); }
@@ -67,23 +67,22 @@ public:
 
         m_time = now;
 
-        const int w = sapp_width();
-        const int h = sapp_height();
+        ivec2 screen = {sapp_width(), sapp_height()};
 
         simgui_new_frame(simgui_frame_desc_t{
-            .width = w,
-            .height = h,
+            .width = screen.x,
+            .height = screen.y,
             .delta_time = dtsec.count(),
             .dpi_scale = sapp_dpi_scale()
         });
 
         auto dtms = std::chrono::duration_cast<ms_t>(dt);
-        m_currentMode->update(dtms);
+        m_currentMode->update(dtms, screen);
 
         // ImGui::ShowDemoWindow();
 
-        sg_begin_default_pass(&m_defaultPassAction, w, h);
-        m_currentMode->defaultRender({w, h});
+        sg_begin_default_pass(&m_defaultPassAction, screen.x, screen.y);
+        m_currentMode->defaultRender(screen);
         simgui_render();
         sg_end_pass();
         sg_commit();

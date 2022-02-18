@@ -16,7 +16,7 @@ class ModeFatalError : public AppMode
 {
     virtual const char* name() const override { return "Fatal error"; }
 
-    virtual void update(ms_t) override
+    virtual void update(ms_t, ivec2) override
     {
         ImGui::Begin("Error");
         ImGui::Text("Fatal error!");

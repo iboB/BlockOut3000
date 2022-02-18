@@ -30,7 +30,7 @@ public:
 
     virtual const char* name() const override { return "Layout Test"; }
 
-    virtual void defaultRender(ivec2 windowSize) override
+    virtual void update(ms_t, ivec2 windowSize) override
     {
         auto cur = m_layouts[m_curLayoutIndex].get();
         cur->update(windowSize);
