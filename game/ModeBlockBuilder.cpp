@@ -11,7 +11,12 @@
 #include "AppMode.hpp"
 #include "LayoutBlockBuilder.hpp"
 
+#include "Pit.hpp"
+
+#include "Renderer.hpp"
+
 #include "lib/imgui.hpp"
+#include "lib/sokol-gfx.h"
 
 #include <array>
 #include <optional>
@@ -58,6 +63,7 @@ public:
     {
         m_curBlockEState.emplace();
         m_curBlockEState->data.gridSize = 3;
+
         return true;
     }
 
@@ -68,10 +74,10 @@ public:
         if (!m_curBlockEState) return;
         auto& curBlockData = m_curBlockEState->data;
 
-        ImGui_BeginLayoutWindow(m_layout.currentBlock());
+        ImGui_BeginLayoutWindow(m_layout.curBlock());
         ImGui::End();
 
-        ImGui_BeginLayoutWindow(m_layout.layers());
+        ImGui_BeginLayoutWindow(m_layout.curBlockLayers());
 
         int i = 0;
         for (int z = 0; z < curBlockData.gridSize; ++z)
@@ -97,23 +103,49 @@ public:
 
         ImGui::End();
 
-        if (m_curBlockGeometryDirty)
-        {
-            recreateBlock();
-        }
+        auto& previewArea = m_layout.curBlockPreview();
+        auto minSize = std::min(previewArea.size.x, previewArea.size.y);
+        m_previewTopLeft = previewArea.topLeft;
+        m_previewSize = {minSize, minSize};
+        // ImGui::SetNextWindowPos({float(previewArea.topLeft.x), float(previewArea.topLeft.y)});
+        // ImGui::SetNextWindowSize({float(minSize), float(minSize)});
+        // ImGui::Begin("Preview");
+        // ImGui::End();
+
+        updateBlock();
+        updatePit();
     }
 
-    void recreateBlock()
+    void updatePit()
     {
+        if (!m_pitGeometryDirty) return;
+        m_pit.reset(new Pit(ivec3::uniform(m_curBlockEState->data.gridSize)));
+        m_pitGeometryDirty = false;
+    }
 
+    void updateBlock()
+    {
+        if (!m_curBlockGeometryDirty) return;
+        m_curBlockGeometryDirty = false;
+    }
+
+    void defaultRender(ivec2) override
+    {
+        auto& r = App::r();
+        sg_apply_viewport(m_previewTopLeft.x, m_previewTopLeft.y, m_previewSize.x, m_previewSize.y, true);
+        m_pit->draw(r);
     }
 
     LayoutBlockBuilder m_layout;
     std::optional<CurBlockEState> m_curBlockEState;
 
-    bool m_curBlockGeometryDirty = false;
+    ivec2 m_previewTopLeft;
+    ivec2 m_previewSize;
 
+    bool m_curBlockGeometryDirty = true;
+    bool m_pitGeometryDirty = true;
 
+    std::unique_ptr<Pit> m_pit;
 };
 } // namespace
 

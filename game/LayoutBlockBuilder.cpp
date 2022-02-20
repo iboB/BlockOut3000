@@ -16,52 +16,72 @@ void LayoutBlockBuilder::createElements()
 {
     set_contain(m_root, LAY_ROW);
 
-    auto left = item();
-    set_size_xy(left, 200, 0);
-    set_behave(left, LAY_VFILL);
-    set_contain(left, LAY_COLUMN);
-    insert(m_root, left);
+    auto leftA = item();
+    set_size_xy(leftA, 200, 0);
+    set_behave(leftA, LAY_VFILL);
+    set_contain(leftA, LAY_COLUMN);
+    insert(m_root, leftA);
 
     {
-        m_currentBlock.name = "Block";
+        m_blockSets.name = "Block Sets";
         auto id = item();
         set_size_xy(id, 0, 300);
         set_behave(id, LAY_HFILL);
-        insert(left, id);
-        m_currentBlock.id = id;
-        registerNamedElement(m_currentBlock);
+        insert(leftA, id);
+        m_blockSets.id = id;
+        registerNamedElement(m_blockSets);
     }
 
     {
-        m_layers.name = "Layers";
+        m_curBlockSet.name = "Set";
         auto id = item();
-        set_behave(id, LAY_HFILL | LAY_VFILL);
-        insert(left, id);
-        m_layers.id = id;
-        registerNamedElement(m_layers);
+        set_behave(id, LAY_FILL);
+        insert(leftA, id);
+        m_curBlockSet.id = id;
+        registerNamedElement(m_curBlockSet);
     }
 
-    auto right = item();
-    set_behave(right, LAY_HFILL | LAY_VFILL);
-    set_contain(right, LAY_COLUMN);
-    insert(m_root, right);
+    auto leftB = item();
+    set_size_xy(leftB, 200, 0);
+    set_behave(leftB, LAY_VFILL);
+    set_contain(leftB, LAY_COLUMN);
+    insert(m_root, leftB);
 
     {
-        m_right1.name = "Right A";
+        m_curBlock.name = "Block";
         auto id = item();
-        set_size_xy(id, 0, 330);
+        set_size_xy(id, 0, 300);
         set_behave(id, LAY_HFILL);
-        insert(right, id);
-        m_right1.id = id;
-        registerNamedElement(m_right1);
+        insert(leftB, id);
+        m_curBlock.id = id;
+        registerNamedElement(m_curBlock);
     }
 
     {
-        m_right2.name = "Right B";
+        m_curBlockLayers.name = "Layers";
         auto id = item();
-        set_behave(id, LAY_HFILL | LAY_VFILL);
-        insert(right, id);
-        m_right2.id = id;
-        registerNamedElement(m_right2);
+        set_behave(id, LAY_FILL);
+        insert(leftB, id);
+        m_curBlockLayers.id = id;
+        registerNamedElement(m_curBlockLayers);
+    }
+
+    {
+        m_curBlockPreview.name = "Preview";
+        auto id = item();
+        set_behave(id, LAY_FILL);
+        insert(m_root, id);
+        m_curBlockPreview.id = id;
+        registerNamedElement(m_curBlockPreview);
+    }
+
+    {
+        m_undoRedo.name = "Actions";
+        auto id = item();
+        set_size_xy(id, 200, 0);
+        set_behave(id, LAY_VFILL);
+        insert(m_root, id);
+        m_undoRedo.id = id;
+        registerNamedElement(m_undoRedo);
     }
 }
