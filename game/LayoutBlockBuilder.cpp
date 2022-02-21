@@ -23,22 +23,22 @@ void LayoutBlockBuilder::createElements()
     insert(m_root, leftA);
 
     {
-        m_blockSets.name = "Block Sets";
+        m_sets.name = "Block Sets";
         auto id = item();
         set_size_xy(id, 0, 300);
         set_behave(id, LAY_HFILL);
         insert(leftA, id);
-        m_blockSets.id = id;
-        registerNamedElement(m_blockSets);
+        m_sets.id = id;
+        registerNamedElement(m_sets);
     }
 
     {
-        m_curBlockSet.name = "Set";
+        m_curSet.name = "Set";
         auto id = item();
         set_behave(id, LAY_FILL);
         insert(leftA, id);
-        m_curBlockSet.id = id;
-        registerNamedElement(m_curBlockSet);
+        m_curSet.id = id;
+        registerNamedElement(m_curSet);
     }
 
     auto leftB = item();
@@ -48,31 +48,31 @@ void LayoutBlockBuilder::createElements()
     insert(m_root, leftB);
 
     {
-        m_curBlock.name = "Block";
+        m_blockData.name = "Block";
         auto id = item();
         set_size_xy(id, 0, 300);
         set_behave(id, LAY_HFILL);
         insert(leftB, id);
-        m_curBlock.id = id;
-        registerNamedElement(m_curBlock);
+        m_blockData.id = id;
+        registerNamedElement(m_blockData);
     }
 
     {
-        m_curBlockLayers.name = "Layers";
+        m_blockLayers.name = "Layers";
         auto id = item();
         set_behave(id, LAY_FILL);
         insert(leftB, id);
-        m_curBlockLayers.id = id;
-        registerNamedElement(m_curBlockLayers);
+        m_blockLayers.id = id;
+        registerNamedElement(m_blockLayers);
     }
 
     {
-        m_curBlockPreview.name = "Preview";
+        m_blockPreview.name = "Preview";
         auto id = item();
         set_behave(id, LAY_FILL);
         insert(m_root, id);
-        m_curBlockPreview.id = id;
-        registerNamedElement(m_curBlockPreview);
+        m_blockPreview.id = id;
+        registerNamedElement(m_blockPreview);
     }
 
     {

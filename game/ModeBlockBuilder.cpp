@@ -74,10 +74,10 @@ public:
         if (!m_curBlockEState) return;
         auto& curBlockData = m_curBlockEState->data;
 
-        ImGui_BeginLayoutWindow(m_layout.curBlock());
+        ImGui_BeginLayoutWindow(m_layout.blockData());
         ImGui::End();
 
-        ImGui_BeginLayoutWindow(m_layout.curBlockLayers());
+        ImGui_BeginLayoutWindow(m_layout.blockLayers());
 
         int i = 0;
         for (int z = 0; z < curBlockData.gridSize; ++z)
@@ -103,10 +103,8 @@ public:
 
         ImGui::End();
 
-        auto& previewArea = m_layout.curBlockPreview();
-        auto minSize = std::min(previewArea.size.x, previewArea.size.y);
-        m_previewTopLeft = previewArea.topLeft;
-        m_previewSize = {minSize, minSize};
+        // auto& previewArea = m_layout.curBlockPreview();
+        // auto minSize = std::min(previewArea.size.x, previewArea.size.y);
         // ImGui::SetNextWindowPos({float(previewArea.topLeft.x), float(previewArea.topLeft.y)});
         // ImGui::SetNextWindowSize({float(minSize), float(minSize)});
         // ImGui::Begin("Preview");
@@ -132,15 +130,14 @@ public:
     void defaultRender(ivec2) override
     {
         auto& r = App::r();
-        sg_apply_viewport(m_previewTopLeft.x, m_previewTopLeft.y, m_previewSize.x, m_previewSize.y, true);
+        auto& previewArea = m_layout.blockPreview();
+        auto minSize = std::min(previewArea.size.x, previewArea.size.y);
+        sg_apply_viewport(previewArea.topLeft.x, previewArea.topLeft.y, minSize, minSize, true);
         m_pit->draw(r);
     }
 
     LayoutBlockBuilder m_layout;
     std::optional<CurBlockEState> m_curBlockEState;
-
-    ivec2 m_previewTopLeft;
-    ivec2 m_previewSize;
 
     bool m_curBlockGeometryDirty = true;
     bool m_pitGeometryDirty = true;

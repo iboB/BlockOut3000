@@ -14,18 +14,18 @@ class LayoutBlockBuilder final : public GUILayout
 public:
     virtual const char* name() const override { return "block builder"; }
 
-    const NamedElement& curBlock() const { return m_curBlock; }
-    const NamedElement& curBlockLayers() const { return m_curBlockLayers; }
-    const NamedElement& curBlockPreview() const { return m_curBlockPreview; }
+    const NamedElement& blockData() const { return m_blockData; }
+    const NamedElement& blockLayers() const { return m_blockLayers; }
+    const NamedElement& blockPreview() const { return m_blockPreview; }
 
 private:
     virtual void updateElements() override;
     void createElements();
 
-    NamedElement m_blockSets;
-    NamedElement m_curBlockSet;
-    NamedElement m_curBlock;
-    NamedElement m_curBlockLayers;
-    NamedElement m_curBlockPreview;
+    NamedElement m_sets;
+    NamedElement m_curSet;
+    NamedElement m_blockData;
+    NamedElement m_blockLayers;
+    NamedElement m_blockPreview;
     NamedElement m_undoRedo;
 };
