@@ -11,7 +11,7 @@
 #include "AppMode.hpp"
 #include "LayoutBlockBuilder.hpp"
 
-#include "Pit.hpp"
+#include "BasicPit.hpp"
 
 #include "Renderer.hpp"
 
@@ -117,7 +117,7 @@ public:
     void updatePit()
     {
         if (!m_pitGeometryDirty) return;
-        m_pit.reset(new Pit(ivec3::uniform(m_curBlockEState->data.gridSize)));
+        m_pit.reset(new BasicPit(ivec3::uniform(m_curBlockEState->data.gridSize)));
         m_pitGeometryDirty = false;
     }
 
@@ -142,7 +142,7 @@ public:
     bool m_curBlockGeometryDirty = true;
     bool m_pitGeometryDirty = true;
 
-    std::unique_ptr<Pit> m_pit;
+    std::unique_ptr<BasicPit> m_pit;
 };
 } // namespace
 

@@ -10,7 +10,7 @@
 #include "App.hpp"
 #include "AppMode.hpp"
 #include "Cube.hpp"
-#include "Pit.hpp"
+#include "BasicPit.hpp"
 #include "Renderer.hpp"
 #include "Vertex.hpp"
 
@@ -168,7 +168,7 @@ public:
         return false;
     }
 
-    Pit m_pit;
+    BasicPit m_pit;
 
     Mesh m_blockSolid;
     Mesh m_blockWire;

@@ -13,11 +13,11 @@
 
 class Renderer;
 
-class Pit
+class BasicPit
 {
 public:
-    Pit(ivec3 size);
-    ~Pit();
+    BasicPit(ivec3 size);
+    ~BasicPit();
 
     void draw(Renderer& r);
 

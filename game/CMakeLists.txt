@@ -46,8 +46,8 @@ add_executable(${game}
     BlockTemplate.cpp
     BlockManager.hpp
     BlockManager.cpp
-    Pit.hpp
-    Pit.cpp
+    BasicPit.hpp
+    BasicPit.cpp
 
     # modes
     ModeFatalError.hpp

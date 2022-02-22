@@ -5,7 +5,7 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "Pit.hpp"
+#include "BasicPit.hpp"
 
 #include "Renderer.hpp"
 #include "Vertex.hpp"
@@ -15,15 +15,15 @@
 #include <itlib/memory_view.hpp>
 #include <vector>
 
-Pit::Pit(ivec3 size)
+BasicPit::BasicPit(ivec3 size)
     : m_size(size)
 {
     createBuffers();
 }
 
-Pit::~Pit() = default;
+BasicPit::~BasicPit() = default;
 
-void Pit::draw(Renderer& r)
+void BasicPit::draw(Renderer& r)
 {
     {
         sg_apply_pipeline(r.solidTrisPipeline());
@@ -71,7 +71,7 @@ void scalePitVertices(itlib::memory_view<Vertex> vertices, float epsilon)
 }
 } // namespace
 
-void Pit::createBuffers()
+void BasicPit::createBuffers()
 {
     float w = float(m_size.x);
     float h = float(m_size.y);
