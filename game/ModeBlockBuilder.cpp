@@ -12,6 +12,7 @@
 #include "LayoutBlockBuilder.hpp"
 
 #include "BasicPit.hpp"
+#include "BlockTemplate.hpp"
 
 #include "Renderer.hpp"
 
@@ -26,11 +27,16 @@ namespace
 
 constexpr int MAX_GRID_SIZE = 5;
 
+struct BlockGrid
+{
+    int size = 1;
+    bool buf[MAX_GRID_SIZE][MAX_GRID_SIZE][MAX_GRID_SIZE];
+};
+
 struct BlockEData
 {
     std::string name;
-    int gridSize = 1;
-    bool grid[MAX_GRID_SIZE*MAX_GRID_SIZE*MAX_GRID_SIZE] = {};
+    BlockGrid grid;
 };
 
 struct CurBlockEState
@@ -55,6 +61,15 @@ void ImGui_BeginLayoutWindow(const GUILayout::NamedElement& elem)
 class ModeBlockBuilder final : public AppMode
 {
 public:
+    LayoutBlockBuilder m_layout;
+    std::optional<CurBlockEState> m_curBlockEState;
+
+    bool m_curBlockGeometryDirty = true;
+    bool m_pitGeometryDirty = true;
+
+    std::unique_ptr<BasicPit> m_pit;
+    std::unique_ptr<BlockTemplate> m_block;
+
     ModeBlockBuilder() {}
 
     virtual const char* name() const override { return "Block Builder"; }
@@ -62,7 +77,7 @@ public:
     virtual bool init() override
     {
         m_curBlockEState.emplace();
-        m_curBlockEState->data.gridSize = 3;
+        m_curBlockEState->data.grid.size = 3;
 
         return true;
     }
@@ -73,28 +88,32 @@ public:
 
         if (!m_curBlockEState) return;
         auto& curBlockData = m_curBlockEState->data;
+        auto& grid = curBlockData.grid;
 
         ImGui_BeginLayoutWindow(m_layout.blockData());
+        if (ImGui::SliderInt("Grid", &grid.size, 1, MAX_GRID_SIZE))
+        {
+            m_curBlockGeometryDirty = true;
+            m_pitGeometryDirty = true;
+        }
         ImGui::End();
 
         ImGui_BeginLayoutWindow(m_layout.blockLayers());
 
-        int i = 0;
-        for (int z = 0; z < curBlockData.gridSize; ++z)
+        for (int z = 0; z < grid.size; ++z)
         {
             ImGui::Text("Layer %d", z);
-            for (int y = 0; y < curBlockData.gridSize; ++y)
+            for (int y = 0; y < grid.size; ++y)
             {
-                for (int x = 0; x < curBlockData.gridSize; ++x)
+                for (int x = 0; x < grid.size; ++x)
                 {
-                    ImGui::PushID(z*curBlockData.gridSize*curBlockData.gridSize + y*curBlockData.gridSize + x);
-                    if (ImGui::Checkbox("", &curBlockData.grid[i]))
+                    ImGui::PushID(z*yama::sq(MAX_GRID_SIZE) + y*MAX_GRID_SIZE + x);
+                    if (ImGui::Checkbox("", &grid.buf[z][y][x]))
                     {
                         m_curBlockGeometryDirty = true;
                     }
                     ImGui::PopID();
                     ImGui::SameLine();
-                    ++i;
                 }
                 ImGui::NewLine();
             }
@@ -117,7 +136,7 @@ public:
     void updatePit()
     {
         if (!m_pitGeometryDirty) return;
-        m_pit.reset(new BasicPit(ivec3::uniform(m_curBlockEState->data.gridSize)));
+        m_pit.reset(new BasicPit(ivec3::uniform(m_curBlockEState->data.grid.size)));
         m_pitGeometryDirty = false;
     }
 
@@ -135,14 +154,6 @@ public:
         sg_apply_viewport(previewArea.topLeft.x, previewArea.topLeft.y, minSize, minSize, true);
         m_pit->draw(r);
     }
-
-    LayoutBlockBuilder m_layout;
-    std::optional<CurBlockEState> m_curBlockEState;
-
-    bool m_curBlockGeometryDirty = true;
-    bool m_pitGeometryDirty = true;
-
-    std::unique_ptr<BasicPit> m_pit;
 };
 } // namespace
 

@@ -40,8 +40,6 @@ add_executable(${game}
     Primitives.hpp
     BlockDefinition.hpp
     BlockDefinition.cpp
-    BlockBuilder.hpp
-    BlockBuilder.cpp
     BlockTemplate.hpp
     BlockTemplate.cpp
     BlockManager.hpp
