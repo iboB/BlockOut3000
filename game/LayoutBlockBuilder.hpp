@@ -17,6 +17,7 @@ public:
     const NamedElement& blockData() const { return m_blockData; }
     const NamedElement& blockLayers() const { return m_blockLayers; }
     const NamedElement& blockPreview() const { return m_blockPreview; }
+    const NamedElement& undoRedo() const { return m_undoRedo; }
 
 private:
     virtual void updateElements() override;

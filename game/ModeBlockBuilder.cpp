@@ -24,6 +24,7 @@
 namespace
 {
 
+constexpr int MAX_BLOCK_NAME_LENGTH = 20;
 constexpr int MAX_GRID_SIZE = 5;
 
 struct BlockGrid
@@ -52,7 +53,7 @@ struct BlockGrid
 
 struct BlockEData
 {
-    std::string name;
+    char name[MAX_BLOCK_NAME_LENGTH] = {};
     BlockGrid grid;
 };
 
@@ -95,6 +96,7 @@ public:
     {
         m_curBlockEState.emplace();
         m_curBlockEState->data.grid.size = 3;
+        m_curBlockEState->history.push_back({"empty", {}});
 
         return true;
     }
@@ -108,6 +110,9 @@ public:
         auto& grid = curBlockData.grid;
 
         ImGui_BeginLayoutWindow(m_layout.blockData());
+
+        ImGui::InputTextWithHint("Name", "name", curBlockData.name, MAX_BLOCK_NAME_LENGTH);
+
         if (ImGui::SliderInt("Grid", &grid.size, 1, MAX_GRID_SIZE))
         {
             m_curBlockGeometryDirty = true;
@@ -172,6 +177,18 @@ public:
             rotateCopy(RotateZ_CW);
         }
 
+        ImGui::NewLine();
+
+        if (ImGui::Button("Test..."))
+        {
+
+        }
+
+        if (ImGui::Button("Save"))
+        {
+
+        }
+
         ImGui::End();
 
         ImGui_BeginLayoutWindow(m_layout.blockLayers());
@@ -204,6 +221,22 @@ public:
         // ImGui::SetNextWindowSize({float(minSize), float(minSize)});
         // ImGui::Begin("Preview");
         // ImGui::End();
+
+        ImGui_BeginLayoutWindow(m_layout.undoRedo());
+        ImGui::PushID("actions box");
+        ImGui::BeginListBox("");
+        for (size_t i = 0; i < m_curBlockEState->history.size(); ++i)
+        {
+            auto& item = m_curBlockEState->history[i];
+            auto curSelected = i == m_curBlockEState->historyPointer;
+            if (ImGui::Selectable(item.label.c_str(), curSelected))
+            {
+                if (curSelected) continue;
+            }
+        }
+        ImGui::EndListBox();
+        ImGui::PopID();
+        ImGui::End();
 
         updateBlock();
         updatePit();
