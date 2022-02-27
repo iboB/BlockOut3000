@@ -13,7 +13,6 @@
 
 #include <vector>
 #include <string>
-#include <cstdint>
 
 class Renderer;
 
@@ -22,7 +21,7 @@ class BlockTemplate
 public:
     // logical data
     std::string m_name;
-    uint32_t m_grid;
+    int m_grid;
     std::vector<ivec3> m_elements;
 
     // physical data
@@ -30,7 +29,7 @@ public:
     Mesh m_wire;
 
 public:
-    BlockTemplate(std::string name, uint32_t grid, std::vector<ivec3> elements);
+    BlockTemplate(std::string name, int grid, std::vector<ivec3> elements);
     ~BlockTemplate();
 
     BlockTemplate(const BlockTemplate&) = delete;
@@ -39,7 +38,7 @@ public:
     BlockTemplate& operator=(BlockTemplate&&) = delete;
 
     const std::string& name() const { return m_name; }
-    uint32_t grid() const { return m_grid; }
+    int grid() const { return m_grid; }
     const std::vector<ivec3> elements() const { return m_elements; }
 
     void draw(Renderer& r, const matrix& pvm);

@@ -18,7 +18,7 @@
 
 #include <map>
 
-BlockTemplate::BlockTemplate(std::string name, uint32_t gridSize, std::vector<ivec3> elements)
+BlockTemplate::BlockTemplate(std::string name, int gridSize, std::vector<ivec3> elements)
     : m_name(std::move(name))
     , m_grid(gridSize)
     , m_elements(std::move(elements))

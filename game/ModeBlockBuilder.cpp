@@ -10,10 +10,9 @@
 #include "App.hpp"
 #include "AppMode.hpp"
 #include "LayoutBlockBuilder.hpp"
-
+#include "RotateI.hpp"
 #include "BasicPit.hpp"
 #include "BlockTemplate.hpp"
-
 #include "Renderer.hpp"
 
 #include "lib/imgui.hpp"
@@ -30,7 +29,25 @@ constexpr int MAX_GRID_SIZE = 5;
 struct BlockGrid
 {
     int size = 1;
-    bool buf[MAX_GRID_SIZE][MAX_GRID_SIZE][MAX_GRID_SIZE];
+    bool buf[MAX_GRID_SIZE][MAX_GRID_SIZE][MAX_GRID_SIZE] = {};
+
+    template <typename F>
+    void eachSet(F f) const
+    {
+        for (int z = 0; z < size; ++z)
+        {
+            for (int y = 0; y < size; ++y)
+            {
+                for (int x = 0; x < size; ++x)
+                {
+                    if (buf[z][y][x])
+                    {
+                        f(ivec3{x, y, z});
+                    }
+                }
+            }
+        }
+    }
 };
 
 struct BlockEData
@@ -96,6 +113,65 @@ public:
             m_curBlockGeometryDirty = true;
             m_pitGeometryDirty = true;
         }
+
+        // shifts
+        if (ImGui::Button("S x"))
+        {
+            for (int z = 0; z < grid.size; ++z)
+            {
+                for (int y = 0; y < grid.size; ++y)
+                {
+                    auto row = grid.buf[z][y];
+                    std::rotate(row, row + grid.size - 1, row + grid.size);
+                }
+            }
+            m_curBlockGeometryDirty = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("S y"))
+        {
+            for (int z = 0; z < grid.size; ++z)
+            {
+                auto plane = grid.buf[z];
+                std::rotate(plane, plane + grid.size - 1, plane + grid.size);
+            }
+            m_curBlockGeometryDirty = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("S z"))
+        {
+            std::rotate(grid.buf, grid.buf + 1, grid.buf + grid.size);
+            m_curBlockGeometryDirty = true;
+        }
+
+        // rotates
+        // copying grid for rotation
+        // we could rotate in place but this is much more readable and perf doesn't matter that much here
+        auto rotateCopy = [&](ivec3(*rotate)(ivec3, int)) {
+            BlockGrid rgrid;
+            rgrid.size = grid.size;
+            grid.eachSet([&](ivec3 v) {
+                auto rv = rotate(v, grid.size);
+                rgrid.buf[rv.z][rv.y][rv.x] = true;
+                });
+            grid = rgrid;
+            m_curBlockGeometryDirty = true;
+        };
+        if (ImGui::Button("R x"))
+        {
+            rotateCopy(RotateX_CW);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("R y"))
+        {
+            rotateCopy(RotateY_CW);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("R z"))
+        {
+            rotateCopy(RotateZ_CW);
+        }
+
         ImGui::End();
 
         ImGui_BeginLayoutWindow(m_layout.blockLayers());
@@ -147,20 +223,11 @@ public:
         std::vector<ivec3> elements;
         auto& curBlockData = m_curBlockEState->data;
         auto& grid = curBlockData.grid;
-        for (int z = 0; z < grid.size; ++z)
-        {
-            for (int y = 0; y < grid.size; ++y)
-            {
-                for (int x = 0; x < grid.size; ++x)
-                {
-                    if (grid.buf[z][y][x])
-                    {
-                        // note that y is inverted to match coordinate system
-                        elements.push_back({x, grid.size - y - 1, z});
-                    }
-                }
-            }
-        }
+        curBlockData.grid.eachSet([&](ivec3 v) {
+            // note that y is inverted to match coordinate system
+            v.y = grid.size - v.y - 1;
+            elements.push_back(v);
+        });
 
         if (elements.empty())
         {
