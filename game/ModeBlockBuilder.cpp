@@ -143,6 +143,35 @@ public:
     void updateBlock()
     {
         if (!m_curBlockGeometryDirty) return;
+
+        std::vector<ivec3> elements;
+        auto& curBlockData = m_curBlockEState->data;
+        auto& grid = curBlockData.grid;
+        for (int z = 0; z < grid.size; ++z)
+        {
+            for (int y = 0; y < grid.size; ++y)
+            {
+                for (int x = 0; x < grid.size; ++x)
+                {
+                    if (grid.buf[z][y][x])
+                    {
+                        // note that y is inverted to match coordinate system
+                        elements.push_back({x, grid.size - y - 1, z});
+                    }
+                }
+            }
+        }
+
+        if (elements.empty())
+        {
+            m_block.reset();
+        }
+        else
+        {
+            m_block.reset(new BlockTemplate(curBlockData.name, curBlockData.grid.size, std::move(elements)));
+            m_block->ensurePhysicalData();
+        }
+
         m_curBlockGeometryDirty = false;
     }
 
@@ -153,6 +182,7 @@ public:
         auto minSize = std::min(previewArea.size.x, previewArea.size.y);
         sg_apply_viewport(previewArea.topLeft.x, previewArea.topLeft.y, minSize, minSize, true);
         m_pit->draw(r);
+        if (m_block) m_block->draw(r, m_pit->projView());
     }
 };
 } // namespace
