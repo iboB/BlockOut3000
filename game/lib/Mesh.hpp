@@ -45,7 +45,7 @@ struct Mesh
 
     void destroy();
 
-    bool valid() const { return vb.id == SG_INVALID_ID; }
+    bool valid() const { return vb.id != SG_INVALID_ID; }
 
 private:
     static Mesh create(const void* buf, size_t bufSize, int numElements);    
