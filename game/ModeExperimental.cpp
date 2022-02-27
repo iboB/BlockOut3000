@@ -10,10 +10,9 @@
 #include "App.hpp"
 #include "AppMode.hpp"
 #include "BasicPit.hpp"
-#include "Renderer.hpp"
 #include "BlockTemplate.hpp"
+#include "RotateI.hpp"
 
-#include "lib/Mesh.hpp"
 #include "lib/imgui.hpp"
 #include "lib/sokol-app.h"
 
@@ -64,11 +63,7 @@ public:
         {
             for (auto& elem : m_blockElements)
             {
-                auto copy = elem;
-                elem.x = copy.y;
-                elem.y = 3 - 1 - copy.x;
-                //elem.x = 4 - 1 - copy.y;
-                //elem.y = copy.x;
+                elem = RotateY_CCW(elem, 3);
             }
             recreateBlock();
         }
