@@ -27,10 +27,12 @@ namespace
 constexpr int MAX_BLOCK_NAME_LENGTH = 20;
 constexpr int MAX_GRID_SIZE = 5;
 
+using GridBuf = std::array<std::array<std::array<bool, MAX_GRID_SIZE>, MAX_GRID_SIZE>, MAX_GRID_SIZE>;
+
 struct BlockGrid
 {
     int size = 1;
-    bool buf[MAX_GRID_SIZE][MAX_GRID_SIZE][MAX_GRID_SIZE] = {};
+    GridBuf buf = {};
 
     template <typename F>
     void eachSet(F f) const
@@ -126,8 +128,8 @@ public:
             {
                 for (int y = 0; y < grid.size; ++y)
                 {
-                    auto row = grid.buf[z][y];
-                    std::rotate(row, row + grid.size - 1, row + grid.size);
+                    auto rb = grid.buf[z][y].begin();
+                    std::rotate(rb, rb + grid.size - 1, rb + grid.size);
                 }
             }
             m_curBlockGeometryDirty = true;
@@ -137,15 +139,16 @@ public:
         {
             for (int z = 0; z < grid.size; ++z)
             {
-                auto plane = grid.buf[z];
-                std::rotate(plane, plane + grid.size - 1, plane + grid.size);
+                auto gb = grid.buf[z].begin();
+                std::rotate(gb, gb + grid.size - 1, gb + grid.size);
             }
             m_curBlockGeometryDirty = true;
         }
         ImGui::SameLine();
         if (ImGui::Button("S z"))
         {
-            std::rotate(grid.buf, grid.buf + 1, grid.buf + grid.size);
+            auto gb = grid.buf.begin();
+            std::rotate(gb, gb + 1, gb + grid.size);
             m_curBlockGeometryDirty = true;
         }
 
@@ -153,13 +156,12 @@ public:
         // copying grid for rotation
         // we could rotate in place but this is much more readable and perf doesn't matter that much here
         auto rotateCopy = [&](ivec3(*rotate)(ivec3, int)) {
-            BlockGrid rgrid;
-            rgrid.size = grid.size;
+            GridBuf b2 = {};
             grid.eachSet([&](ivec3 v) {
                 auto rv = rotate(v, grid.size);
-                rgrid.buf[rv.z][rv.y][rv.x] = true;
-                });
-            grid = rgrid;
+                b2[rv.z][rv.y][rv.x] = true;
+            });
+            grid.buf = b2;
             m_curBlockGeometryDirty = true;
         };
         if (ImGui::Button("R x"))
