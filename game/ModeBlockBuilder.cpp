@@ -16,7 +16,7 @@
 #include "Renderer.hpp"
 
 #include "lib/imgui.hpp"
-#include "lib/sokol-gfx.h"
+#include "lib/sokol-app.h"
 
 #include <array>
 #include <optional>
@@ -114,11 +114,16 @@ public:
         ImGui_BeginLayoutWindow(m_layout.blockData());
 
         ImGui::InputTextWithHint("Name", "name", curBlockData.name, MAX_BLOCK_NAME_LENGTH);
+        if (ImGui::IsItemDeactivatedAfterEdit())
+        {
+            addAction("rename to %s", curBlockData.name);
+        }
 
         if (ImGui::SliderInt("Grid", &grid.size, 1, MAX_GRID_SIZE))
         {
             m_curBlockGeometryDirty = true;
             m_pitGeometryDirty = true;
+            addAction("grid resized to %d", grid.size);
         }
 
         // shifts
@@ -133,6 +138,7 @@ public:
                 }
             }
             m_curBlockGeometryDirty = true;
+            addAction("shift x");
         }
         ImGui::SameLine();
         if (ImGui::Button("S y"))
@@ -143,6 +149,7 @@ public:
                 std::rotate(gb, gb + grid.size - 1, gb + grid.size);
             }
             m_curBlockGeometryDirty = true;
+            addAction("shift y");
         }
         ImGui::SameLine();
         if (ImGui::Button("S z"))
@@ -150,6 +157,7 @@ public:
             auto gb = grid.buf.begin();
             std::rotate(gb, gb + 1, gb + grid.size);
             m_curBlockGeometryDirty = true;
+            addAction("shift z");
         }
 
         // rotates
@@ -167,16 +175,19 @@ public:
         if (ImGui::Button("R x"))
         {
             rotateCopy(RotateX_CW);
+            addAction("rotate x");
         }
         ImGui::SameLine();
         if (ImGui::Button("R y"))
         {
             rotateCopy(RotateY_CW);
+            addAction("rotate y");
         }
         ImGui::SameLine();
         if (ImGui::Button("R z"))
         {
             rotateCopy(RotateZ_CW);
+            addAction("rotate z");
         }
 
         ImGui::NewLine();
@@ -206,6 +217,7 @@ public:
                     if (ImGui::Checkbox("", &grid.buf[z][y][x]))
                     {
                         m_curBlockGeometryDirty = true;
+                        addAction("toggle %d;%d;%d", x, y, z);
                     }
                     ImGui::PopID();
                     ImGui::SameLine();
@@ -225,19 +237,23 @@ public:
         // ImGui::End();
 
         ImGui_BeginLayoutWindow(m_layout.undoRedo());
-        ImGui::PushID("actions box");
-        ImGui::BeginListBox("");
+        ImGui::BeginListBox("##actions", {-FLT_MIN, -FLT_MIN});
         for (size_t i = 0; i < m_curBlockEState->history.size(); ++i)
         {
-            auto& item = m_curBlockEState->history[i];
-            auto curSelected = i == m_curBlockEState->historyPointer;
+            const auto& item = m_curBlockEState->history[i];
+            auto& ptr = m_curBlockEState->historyPointer;
+            auto curSelected = i == ptr;
+            ImGui::PushID(i);
             if (ImGui::Selectable(item.label.c_str(), curSelected))
             {
-                if (curSelected) continue;
+                if (!curSelected) // clicking on the same action again
+                {
+                    gotoAction(i);
+                }
             }
+            ImGui::PopID();
         }
         ImGui::EndListBox();
-        ImGui::PopID();
         ImGui::End();
 
         updateBlock();
@@ -277,6 +293,36 @@ public:
         m_curBlockGeometryDirty = false;
     }
 
+    void addAction(const char* fmt, ...)
+    {
+        auto& history = m_curBlockEState->history;
+        auto& ptr = m_curBlockEState->historyPointer;
+
+        // erase undone actions which are invalidated:
+        if (ptr != history.size() - 1)
+        {
+            history.erase(history.begin() + ptr + 1, history.end());
+        }
+
+        // create label
+        va_list args;
+        va_start(args, fmt);
+        va_list argscopy;
+        va_copy(argscopy, args);
+
+        const auto n = vsnprintf(nullptr, 0, fmt, args) + 1; // +1 extra space for '\0'
+
+        std::string label(n, 0);
+        vsnprintf(label.data(), label.size(), fmt, argscopy);
+        va_end(args);
+
+        // add action
+        auto& newAction = history.emplace_back();
+        newAction.label = label;
+        newAction.data = m_curBlockEState->data;
+        ++ptr;
+    }
+
     void defaultRender(ivec2) override
     {
         auto& r = App::r();
@@ -285,6 +331,37 @@ public:
         sg_apply_viewport(previewArea.topLeft.x, previewArea.topLeft.y, minSize, minSize, true);
         m_pit->draw(r);
         if (m_block) m_block->draw(r, m_pit->projView());
+    }
+
+    void gotoAction(size_t i)
+    {
+        auto& history = m_curBlockEState->history;
+        if (i >= history.size()) return;
+
+        m_curBlockEState->data = history[i].data;
+        m_curBlockEState->historyPointer = i;
+
+        // we could try to compare states and determine which of these (if any) is needed exactly,
+        // but why bother? We don't care about perf here
+        m_curBlockGeometryDirty = true;
+        m_pitGeometryDirty = true;
+    }
+
+    virtual bool handleEvent(const sapp_event& event) override
+    {
+        if (event.type != SAPP_EVENTTYPE_KEY_UP) return false;
+        if (event.modifiers != SAPP_MODIFIER_CTRL) return false;
+        if (event.key_code == SAPP_KEYCODE_Z)
+        {
+            gotoAction(m_curBlockEState->historyPointer - 1);
+            return true;
+        }
+        else if (event.key_code == SAPP_KEYCODE_Y)
+        {
+            gotoAction(m_curBlockEState->historyPointer + 1);
+            return true;
+        }
+        return false;
     }
 };
 } // namespace

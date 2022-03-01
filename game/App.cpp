@@ -118,7 +118,7 @@ public:
 
     void onEvent(const sapp_event& event)
     {
-        simgui_handle_event(&event);
+        if (simgui_handle_event(&event)) return;
         m_currentMode->handleEvent(event);
     }
 
