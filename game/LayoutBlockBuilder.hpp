@@ -14,6 +14,8 @@ class LayoutBlockBuilder final : public GUILayout
 public:
     virtual const char* name() const override { return "block builder"; }
 
+    const NamedElement& sets() const { return m_sets; }
+    const NamedElement& curSet() const { return m_curSet; }
     const NamedElement& blockData() const { return m_blockData; }
     const NamedElement& blockLayers() const { return m_blockLayers; }
     const NamedElement& blockPreview() const { return m_blockPreview; }

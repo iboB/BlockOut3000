@@ -111,6 +111,12 @@ public:
         auto& curBlockData = m_curBlockEState->data;
         auto& grid = curBlockData.grid;
 
+        ImGui_BeginLayoutWindow(m_layout.sets());
+        ImGui::End();
+
+        ImGui_BeginLayoutWindow(m_layout.curSet());
+        ImGui::End();
+
         ImGui_BeginLayoutWindow(m_layout.blockData());
 
         ImGui::InputTextWithHint("Name", "name", curBlockData.name, MAX_BLOCK_NAME_LENGTH);
@@ -194,7 +200,6 @@ public:
 
         if (ImGui::Button("Test..."))
         {
-
         }
 
         if (ImGui::Button("Save"))
