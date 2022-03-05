@@ -42,7 +42,10 @@ public:
 
     virtual bool init() override { return true; }
 
-    virtual void update(ms_t, ivec2) override {}
+    virtual void update(ms_t, ivec2) override
+    {
+        ImGui::ShowDemoWindow();
+    }
 
     virtual void defaultRender(ivec2) override
     {

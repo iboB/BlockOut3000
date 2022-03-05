@@ -31,6 +31,7 @@ add_executable(${game}
     AppModePtr.hpp
     AppMode.hpp
     AppMode.cpp
+
     Renderer.hpp
     Renderer.cpp
 
@@ -38,12 +39,10 @@ add_executable(${game}
     Cube.hpp
     Cube.cpp
     Primitives.hpp
-    BlockDefinition.hpp
-    BlockDefinition.cpp
     BlockTemplate.hpp
     BlockTemplate.cpp
-    BlockManager.hpp
-    BlockManager.cpp
+    BlockRegistry.hpp
+    BlockRegistry.cpp
     BasicPit.hpp
     BasicPit.cpp
 

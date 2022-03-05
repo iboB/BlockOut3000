@@ -7,17 +7,16 @@
 //
 #pragma once
 
-#include "BlockDefinitionPtr.hpp"
+#include "BlockTemplatePtr.hpp"
 
-#include <unordered_map>
 #include <string>
 #include <vector>
 
-class BlockManager
+class BlockRegistry
 {
 public:
-    BlockManager();
-    ~BlockManager();
+    BlockRegistry();
+    ~BlockRegistry();
 
     struct BlockSet;
     using BlockSetPtr = std::shared_ptr<BlockSet>;
@@ -25,11 +24,10 @@ public:
     {
         std::string name;
         std::vector<BlockSetPtr> includedSets;
-        std::vector<BlockDefinitionPtr> blockDefinitions;
+        std::vector<BlockTemplatePtr> blockDefinitions;
     };
 
 private:
-    // registry of all known blocks
-    std::unordered_map<std::string, BlockDefinitionPtr> m_blocks;
-    std::unordered_map<std::string, BlockSetPtr> m_sets;
+    std::vector<BlockTemplatePtr> m_blocks; // all known blocks
+    std::vector<BlockSetPtr> m_sets; // all sets
 };

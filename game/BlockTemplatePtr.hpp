@@ -9,5 +9,5 @@
 
 #include <memory>
 
-class BlockDefinition;
-using BlockDefinitionPtr = std::shared_ptr<BlockDefinition>;
+class BlockTemplate;
+using BlockTemplatePtr = std::shared_ptr<BlockTemplate>;
