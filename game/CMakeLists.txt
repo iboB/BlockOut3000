@@ -28,9 +28,9 @@ add_executable(${game}
     # app
     App.hpp
     App.cpp
-    AppModePtr.hpp
-    AppMode.hpp
-    AppMode.cpp
+    AppStatePtr.hpp
+    AppState.hpp
+    AppState.cpp
 
     Renderer.hpp
     Renderer.cpp
@@ -46,17 +46,17 @@ add_executable(${game}
     BasicPit.hpp
     BasicPit.cpp
 
-    # modes
-    ModePanic.hpp
-    ModePanic.cpp
-    ModeExperimental.hpp
-    ModeExperimental.cpp
-    "ModeBlockBuilder.hpp"
-    "ModeBlockBuilder.cpp"
+    # states
+    StatePanic.hpp
+    StatePanic.cpp
+    StateExperimental.hpp
+    StateExperimental.cpp
+    "StateBlockBuilder.hpp"
+    "StateBlockBuilder.cpp"
     "LayoutExperimental.hpp"
     "LayoutExperimental.cpp"
-    "ModeLayoutTest.hpp"
-    "ModeLayoutTest.cpp"
+    "StateLayoutTest.hpp"
+    "StateLayoutTest.cpp"
  "LayoutBlockBuilder.hpp" "LayoutBlockBuilder.cpp" "lib/sokol-glue.h" "RotateI.hpp")
 
 target_link_libraries(${game}

@@ -7,12 +7,12 @@
 //
 #include "App.hpp"
 
-#include "AppMode.hpp"
+#include "AppState.hpp"
 
-#include "ModeExperimental.hpp"
-#include "ModeBlockBuilder.hpp"
-#include "ModePanic.hpp"
-#include "ModeLayoutTest.hpp"
+#include "StateExperimental.hpp"
+#include "StateBlockBuilder.hpp"
+#include "StatePanic.hpp"
+#include "StateLayoutTest.hpp"
 
 #include "Renderer.hpp"
 
@@ -27,12 +27,12 @@ namespace
 
 using clock = std::chrono::steady_clock;
 
-struct InitialMode : public AppMode
+struct InitialState : public AppState
 {
-    AppModePtr nextMode;
-    InitialMode(AppModePtr mode) : nextMode(std::move(mode)) { setComplete(); }
+    AppStatePtr next;
+    InitialState(AppStatePtr state) : next(std::move(state)) { setComplete(); }
     virtual const char* name() const override { return "initial"; }
-    virtual AppModePtr getNextMode() override { return nextMode; }
+    virtual AppStatePtr getNextState() override { return next; }
 };
 
 class AppImpl
@@ -57,16 +57,16 @@ public:
 
         m_renderer.init();
 
-        auto mode = MakeMode_BlockBuilder();
-        //auto mode = MakeMode_Experimental();
-        m_mode = std::make_shared<InitialMode>(std::move(mode));
+        auto state = MakeState_BlockBuilder();
+        //auto state = MakeState_Experimental();
+        m_state = std::make_shared<InitialState>(std::move(state));
     }
 
     ~AppImpl() { simgui_shutdown(); }
 
     void frame()
     {
-        checkForModeChange();
+        checkForStateChange();
 
         auto now = clock::now();
         auto dt = now - m_time;
@@ -87,10 +87,10 @@ public:
         });
 
         auto dtms = std::chrono::duration_cast<ms_t>(dt);
-        m_mode->update(dtms, screen);
+        m_state->update(dtms, screen);
 
         sg_begin_default_pass(&m_defaultPassAction, screen.x, screen.y);
-        m_mode->defaultRender(screen);
+        m_state->defaultRender(screen);
         simgui_render();
         sg_end_pass();
         sg_commit();
@@ -104,18 +104,18 @@ public:
     void immediatePanic()
     {
         puts("panic!");
-        if (m_preservedModeOnPanic)
+        if (m_preservedStateOnPanic)
         {
             // error: panicking while we are in panic?
             return;
         }
-        m_mode->deactivate();
-        m_preservedModeOnPanic = m_mode;
-        m_mode = MakeMode_Panic();
-        m_mode->activate();
+        m_state->deactivate();
+        m_preservedStateOnPanic = m_state;
+        m_state = MakeState_Panic();
+        m_state->activate();
     }
 
-    void checkForModeChange()
+    void checkForStateChange()
     {
         if (m_panicPending)
         {
@@ -123,18 +123,18 @@ public:
             return;
         }
 
-        if (!m_mode->completed()) return; // no mode change
+        if (!m_state->completed()) return; // no state change
 
-        m_mode->deactivate();
-        m_mode = m_mode->getNextMode();
-        if (!m_mode)
+        m_state->deactivate();
+        m_state = m_state->getNextState();
+        if (!m_state)
         {
-            // TODO: default modes
-            m_mode = MakeMode_Panic();
+            // TODO: default states
+            m_state = MakeState_Panic();
         }
 
-        printf("Switching to mode %s\n", m_mode->name());
-        if (!m_mode->activate())
+        printf("Switching to state %s\n", m_state->name());
+        if (!m_state->activate())
         {
             immediatePanic();
             return;
@@ -144,7 +144,7 @@ public:
     void onEvent(const sapp_event& event)
     {
         if (simgui_handle_event(&event)) return;
-        m_mode->handleEvent(event);
+        m_state->handleEvent(event);
     }
 
     clock::time_point m_time = {};
@@ -153,14 +153,14 @@ public:
 
     Renderer m_renderer;
 
-    AppModePtr m_mode;
+    AppStatePtr m_state;
 
     // when this pointer is not null, we are in panic state
-    // it holds the mode which was active when the panic state was initiated
-    // (m_mode being ModePanic after that point)
-    // we use this to make the guarantee to modes that no unexpected changes of state will happen
+    // it holds the state which was active when the panic state was initiated
+    // (m_state being StatePanic after that point)
+    // we use this to make the guarantee to states that no unexpected changes of state will happen
     // while they're active and generally allow them to be in control of their lifetime
-    AppModePtr m_preservedModeOnPanic;
+    AppStatePtr m_preservedStateOnPanic;
 
     // panic was initiated during this frame
     bool m_panicPending = false;

@@ -7,6 +7,7 @@
 //
 #pragma once
 
-#include "AppModePtr.hpp"
+#include <memory>
 
-AppModePtr MakeMode_Experimental();
+class AppState;
+using AppStatePtr = std::shared_ptr<AppState>;

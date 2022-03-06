@@ -6,24 +6,24 @@
 // http://opensource.org/licenses/MIT
 //
 #pragma once
-#include "AppModePtr.hpp"
+#include "AppStatePtr.hpp"
 
 #include "lib/Time.hpp"
 #include "lib/vec2.hpp"
 
 extern "C" struct sapp_event;
 
-class AppMode
+class AppState
 {
 public:
-    virtual ~AppMode();
+    virtual ~AppState();
 
     // for debugging purposes
     virtual const char* name() const = 0;
 
-    // shows that the mode has completed its purpose
+    // shows that the state has completed its purpose
     // and can be released by the application
-    // and substituted with a pending mode
+    // and substituted with a pending state
     bool completed() const { return m_completed; }
 
     // app flow
@@ -33,9 +33,9 @@ public:
     virtual bool handleEvent(const sapp_event& event);
     virtual void deactivate();
 
-    // optionally override to provide a next mode when modes are changed
+    // optionally override to provide a next state when states are changed
     // may be called after deactivate!
-    virtual AppModePtr getNextMode();
+    virtual AppStatePtr getNextState();
 
 protected:
     void setComplete() { m_completed = true; }

@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "ModeLayoutTest.hpp"
+#include "StateLayoutTest.hpp"
 
 #include "App.hpp"
-#include "AppMode.hpp"
+#include "AppState.hpp"
 
 #include "LayoutExperimental.hpp"
 #include "LayoutBlockBuilder.hpp"
@@ -18,10 +18,10 @@
 
 namespace
 {
-class ModeLayoutTest final : public AppMode
+class StateLayoutTest final : public AppState
 {
 public:
-    ModeLayoutTest()
+    StateLayoutTest()
     {
         // add layouts to test with
         m_layouts.emplace_back(new LayoutBlockBuilder);
@@ -67,7 +67,7 @@ public:
 };
 } // namespace
 
-AppModePtr MakeMode_LayoutTest()
+AppStatePtr MakeState_LayoutTest()
 {
-    return std::make_shared<ModeLayoutTest>();
+    return std::make_shared<StateLayoutTest>();
 }

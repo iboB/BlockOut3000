@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "ModeExperimental.hpp"
+#include "StateExperimental.hpp"
 
 #include "App.hpp"
-#include "AppMode.hpp"
+#include "AppState.hpp"
 #include "BasicPit.hpp"
 #include "BlockTemplate.hpp"
 #include "RotateI.hpp"
@@ -22,10 +22,10 @@
 
 namespace
 {
-class ModeExperimental final : public AppMode
+class StateExperimental final : public AppState
 {
 public:
-    ModeExperimental()
+    StateExperimental()
         : m_pit({5, 5, 5})
     {
         m_blockElements = {{1, 0, 0}, {1, 1, 0}, {1, 2, 0}, {2, 2, 0}};
@@ -79,7 +79,7 @@ public:
 };
 } // namespace
 
-AppModePtr MakeMode_Experimental()
+AppStatePtr MakeState_Experimental()
 {
-    return std::make_shared<ModeExperimental>();
+    return std::make_shared<StateExperimental>();
 }

@@ -7,6 +7,6 @@
 //
 #pragma once
 
-#include "AppModePtr.hpp"
+#include "AppStatePtr.hpp"
 
-AppModePtr MakeMode_Panic();
+AppStatePtr MakeState_BlockBuilder();

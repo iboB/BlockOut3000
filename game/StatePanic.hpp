@@ -7,7 +7,6 @@
 //
 #pragma once
 
-#include <memory>
+#include "AppStatePtr.hpp"
 
-class AppMode;
-using AppModePtr = std::shared_ptr<AppMode>;
+AppStatePtr MakeState_Panic();

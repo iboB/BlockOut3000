@@ -5,10 +5,10 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "ModeBlockBuilder.hpp"
+#include "StateBlockBuilder.hpp"
 
 #include "App.hpp"
-#include "AppMode.hpp"
+#include "AppState.hpp"
 #include "LayoutBlockBuilder.hpp"
 #include "RotateI.hpp"
 #include "BasicPit.hpp"
@@ -84,14 +84,14 @@ void ImGui_BeginLayoutWindow(const GUILayout::NamedElement& elem)
     ImGui::Begin(elem.name.c_str());
 }
 
-class ModeBlockBuilder final : public AppMode
+class StateBlockBuilder final : public AppState
 {
 public:
     LayoutBlockBuilder m_layout;
     std::optional<BlockEditData> m_blockEditData;
     BlockPhysicalData m_physicalData;
 
-    ModeBlockBuilder() {}
+    StateBlockBuilder() {}
 
     virtual const char* name() const override { return "Block Builder"; }
 
@@ -366,7 +366,7 @@ public:
 };
 } // namespace
 
-AppModePtr MakeMode_BlockBuilder()
+AppStatePtr MakeState_BlockBuilder()
 {
-    return std::make_shared<ModeBlockBuilder>();
+    return std::make_shared<StateBlockBuilder>();
 }

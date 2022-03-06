@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include "AppModePtr.hpp"
+#include "AppStatePtr.hpp"
 
 class Renderer;
 

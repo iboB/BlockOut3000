@@ -5,14 +5,14 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "ModePanic.hpp"
-#include "AppMode.hpp"
+#include "StatePanic.hpp"
+#include "AppState.hpp"
 
 #include "lib/imgui.hpp"
 
 namespace
 {
-class ModePanic : public AppMode
+class StatePanic : public AppState
 {
     virtual const char* name() const override { return "Panic"; }
 
@@ -25,7 +25,7 @@ class ModePanic : public AppMode
 };
 } // namespace
 
-AppModePtr MakeMode_Panic()
+AppStatePtr MakeState_Panic()
 {
-    return std::make_shared<ModePanic>();
+    return std::make_shared<StatePanic>();
 }
