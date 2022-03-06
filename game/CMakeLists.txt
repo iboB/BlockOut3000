@@ -47,8 +47,8 @@ add_executable(${game}
     BasicPit.cpp
 
     # modes
-    ModeFatalError.hpp
-    ModeFatalError.cpp
+    ModePanic.hpp
+    ModePanic.cpp
     ModeExperimental.hpp
     ModeExperimental.cpp
     "ModeBlockBuilder.hpp"

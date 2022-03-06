@@ -40,7 +40,7 @@ public:
 
     virtual const char* name() const override { return "Experimental"; }
 
-    virtual bool init() override { return true; }
+    virtual bool activate() override { return true; }
 
     virtual void update(ms_t, ivec2) override
     {
@@ -81,5 +81,5 @@ public:
 
 AppModePtr MakeMode_Experimental()
 {
-    return std::make_unique<ModeExperimental>();
+    return std::make_shared<ModeExperimental>();
 }

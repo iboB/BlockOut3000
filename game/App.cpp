@@ -11,7 +11,7 @@
 
 #include "ModeExperimental.hpp"
 #include "ModeBlockBuilder.hpp"
-#include "ModeFatalError.hpp"
+#include "ModePanic.hpp"
 #include "ModeLayoutTest.hpp"
 
 #include "Renderer.hpp"
@@ -26,6 +26,14 @@ namespace
 {
 
 using clock = std::chrono::steady_clock;
+
+struct InitialMode : public AppMode
+{
+    AppModePtr nextMode;
+    InitialMode(AppModePtr mode) : nextMode(std::move(mode)) { setComplete(); }
+    virtual const char* name() const override { return "initial"; }
+    virtual AppModePtr getNextMode() override { return nextMode; }
+};
 
 class AppImpl
 {
@@ -49,8 +57,9 @@ public:
 
         m_renderer.init();
 
-        m_nextMode = MakeMode_BlockBuilder();
-        //m_nextMode = MakeMode_Experimental();
+        auto mode = MakeMode_BlockBuilder();
+        //auto mode = MakeMode_Experimental();
+        m_mode = std::make_shared<InitialMode>(std::move(mode));
     }
 
     ~AppImpl() { simgui_shutdown(); }
@@ -78,49 +87,66 @@ public:
         });
 
         auto dtms = std::chrono::duration_cast<ms_t>(dt);
-        m_currentMode->update(dtms, screen);
+        m_mode->update(dtms, screen);
 
         // ImGui::ShowDemoWindow();
 
         sg_begin_default_pass(&m_defaultPassAction, screen.x, screen.y);
-        m_currentMode->defaultRender(screen);
+        m_mode->defaultRender(screen);
         simgui_render();
         sg_end_pass();
         sg_commit();
     }
 
+    void panic()
+    {
+        m_panicPending = true;
+    }
+
+    void immediatePanic()
+    {
+        puts("panic!");
+        if (m_preservedModeOnPanic)
+        {
+            // error: panicking while we are in panic?
+            return;
+        }
+        m_mode->deactivate();
+        m_preservedModeOnPanic = m_mode;
+        m_mode = MakeMode_Panic();
+        m_mode->activate();
+    }
+
     void checkForModeChange()
     {
-        if (!m_nextMode) return;
-
-        // loop while we have a pending mode
-        int fails = 0;
-        while (true)
+        if (m_panicPending)
         {
-            m_currentMode.reset();
-            AppModePtr pending;
-            pending.swap(m_nextMode);
-            auto success = pending->init(); // this might set the next mode
-            if (success)
-            {
-                printf("Switching to mode %s\n", pending->name());
-                m_currentMode = std::move(pending);
-                break;
-            }
-            else
-            {
-                printf("Error initializing mode %s\n", pending->name());
-                ++fails;
-            }
+            immediatePanic();
+            return;
+        }
 
-            if (fails == 5 || !m_nextMode) { m_nextMode = Make_Mode_FatalError(); }
+        if (!m_mode->completed()) return; // no mode change
+
+        m_mode->deactivate();
+        m_mode = m_mode->getNextMode();
+        if (!m_mode)
+        {
+            // TODO: default modes
+            m_mode = MakeMode_Panic();
+        }
+
+        printf("Switching to mode %s\n", m_mode->name());
+        if (!m_mode->activate())
+        {
+            immediatePanic();
+            return;
         }
     }
 
     void onEvent(const sapp_event& event)
     {
         if (simgui_handle_event(&event)) return;
-        m_currentMode->handleEvent(event);
+        m_mode->handleEvent(event);
     }
 
     clock::time_point m_time = {};
@@ -129,8 +155,17 @@ public:
 
     Renderer m_renderer;
 
-    AppModePtr m_currentMode;
-    AppModePtr m_nextMode;
+    AppModePtr m_mode;
+
+    // when this pointer is not null, we are in panic state
+    // it holds the mode which was active when the panic state was initiated
+    // (m_mode being ModePanic after that point)
+    // we use this to make the guarantee to modes that no unexpected changes of state will happen
+    // while they're active and generally allow them to be in control of their lifetime
+    AppModePtr m_preservedModeOnPanic;
+
+    // panic was initiated during this frame
+    bool m_panicPending = false;
 };
 
 AppImpl* theApp;

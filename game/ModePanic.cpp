@@ -5,16 +5,16 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "ModeFatalError.hpp"
+#include "ModePanic.hpp"
 #include "AppMode.hpp"
 
 #include "lib/imgui.hpp"
 
 namespace
 {
-class ModeFatalError : public AppMode
+class ModePanic : public AppMode
 {
-    virtual const char* name() const override { return "Fatal error"; }
+    virtual const char* name() const override { return "Panic"; }
 
     virtual void update(ms_t, ivec2) override
     {
@@ -25,7 +25,7 @@ class ModeFatalError : public AppMode
 };
 } // namespace
 
-AppModePtr Make_Mode_FatalError()
+AppModePtr MakeMode_Panic()
 {
-    return std::make_unique<ModeFatalError>();
+    return std::make_shared<ModePanic>();
 }

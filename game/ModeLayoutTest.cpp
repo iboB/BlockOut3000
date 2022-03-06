@@ -69,5 +69,5 @@ public:
 
 AppModePtr MakeMode_LayoutTest()
 {
-    return std::make_unique<ModeLayoutTest>();
+    return std::make_shared<ModeLayoutTest>();
 }

@@ -94,7 +94,7 @@ public:
 
     virtual const char* name() const override { return "Block Builder"; }
 
-    virtual bool init() override
+    virtual bool activate() override
     {
         m_curBlockEState.emplace();
         m_curBlockEState->data.grid.size = 3;
@@ -373,5 +373,5 @@ public:
 
 AppModePtr MakeMode_BlockBuilder()
 {
-    return std::make_unique<ModeBlockBuilder>();
+    return std::make_shared<ModeBlockBuilder>();
 }

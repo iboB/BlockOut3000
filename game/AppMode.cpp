@@ -8,7 +8,9 @@
 #include "AppMode.hpp"
 
 AppMode::~AppMode() = default;
-bool AppMode::init() { return true; }
+bool AppMode::activate() { return true; }
 void AppMode::update(ms_t, ivec2) {}
 void AppMode::defaultRender(ivec2) {}
 bool AppMode::handleEvent(const sapp_event&) { return false; }
+void AppMode::deactivate() {}
+AppModePtr AppMode::getNextMode() { return {}; }

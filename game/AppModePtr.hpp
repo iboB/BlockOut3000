@@ -10,4 +10,4 @@
 #include <memory>
 
 class AppMode;
-using AppModePtr = std::unique_ptr<AppMode>;
+using AppModePtr = std::shared_ptr<AppMode>;
