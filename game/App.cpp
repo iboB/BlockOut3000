@@ -89,8 +89,6 @@ public:
         auto dtms = std::chrono::duration_cast<ms_t>(dt);
         m_mode->update(dtms, screen);
 
-        // ImGui::ShowDemoWindow();
-
         sg_begin_default_pass(&m_defaultPassAction, screen.x, screen.y);
         m_mode->defaultRender(screen);
         simgui_render();
