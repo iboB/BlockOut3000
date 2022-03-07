@@ -242,7 +242,7 @@ public:
             const auto& item = m_blockEditData.history[i];
             auto& ptr = m_blockEditData.historyPointer;
             auto curSelected = i == ptr;
-            ImGui::PushID(i);
+            ImGui::PushID(int(i));
             if (ImGui::Selectable(item.label.c_str(), curSelected))
             {
                 if (!curSelected) // clicking on the same action again
