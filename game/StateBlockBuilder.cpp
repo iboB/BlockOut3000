@@ -19,7 +19,6 @@
 #include "lib/sokol-app.h"
 
 #include <array>
-#include <optional>
 
 namespace
 {
@@ -88,7 +87,7 @@ class StateBlockBuilder final : public AppState
 {
 public:
     LayoutBlockBuilder m_layout;
-    std::optional<BlockEditData> m_blockEditData;
+    BlockEditData m_blockEditData;
     BlockPhysicalData m_physicalData;
 
     StateBlockBuilder() {}
@@ -97,8 +96,8 @@ public:
 
     virtual bool activate() override
     {
-        m_blockEditData.emplace();
-        m_blockEditData->history.push_back({"empty", {}});
+        m_blockEditData = {};
+        m_blockEditData.history.push_back({"empty", {}});
 
         // force recreation of pit with invalid size data
         m_physicalData.source.grid.size = 0;
@@ -110,8 +109,7 @@ public:
     {
         m_layout.update(windowSize);
 
-        if (!m_blockEditData) return;
-        auto& curBlockData = m_blockEditData->block;
+        auto& curBlockData = m_blockEditData.block;
         auto& grid = curBlockData.grid;
 
         ImGui_BeginLayoutWindow(m_layout.sets());
@@ -239,10 +237,10 @@ public:
 
         ImGui_BeginLayoutWindow(m_layout.undoRedo());
         ImGui::BeginListBox("##actions", {-FLT_MIN, -FLT_MIN});
-        for (size_t i = 0; i < m_blockEditData->history.size(); ++i)
+        for (size_t i = 0; i < m_blockEditData.history.size(); ++i)
         {
-            const auto& item = m_blockEditData->history[i];
-            auto& ptr = m_blockEditData->historyPointer;
+            const auto& item = m_blockEditData.history[i];
+            auto& ptr = m_blockEditData.historyPointer;
             auto curSelected = i == ptr;
             ImGui::PushID(i);
             if (ImGui::Selectable(item.label.c_str(), curSelected))
@@ -262,7 +260,7 @@ public:
 
     void updatePhysicalData()
     {
-        const auto& logical = m_blockEditData->block;
+        const auto& logical = m_blockEditData.block;
         auto& physical = m_physicalData.source;
 
         bool pitDirty = logical.grid.size != physical.grid.size;
@@ -300,8 +298,8 @@ public:
 
     void addAction(const char* fmt, ...)
     {
-        auto& history = m_blockEditData->history;
-        auto& ptr = m_blockEditData->historyPointer;
+        auto& history = m_blockEditData.history;
+        auto& ptr = m_blockEditData.historyPointer;
 
         // erase undone actions which are invalidated:
         if (ptr != history.size() - 1)
@@ -324,7 +322,7 @@ public:
         // add action
         auto& newAction = history.emplace_back();
         newAction.label = label;
-        newAction.block = m_blockEditData->block;
+        newAction.block = m_blockEditData.block;
         ++ptr;
     }
 
@@ -340,11 +338,11 @@ public:
 
     void gotoAction(size_t i)
     {
-        auto& history = m_blockEditData->history;
+        auto& history = m_blockEditData.history;
         if (i >= history.size()) return;
 
-        m_blockEditData->block = history[i].block;
-        m_blockEditData->historyPointer = i;
+        m_blockEditData.block = history[i].block;
+        m_blockEditData.historyPointer = i;
     }
 
     virtual bool handleEvent(const sapp_event& event) override
@@ -353,12 +351,12 @@ public:
         if (event.modifiers != SAPP_MODIFIER_CTRL) return false;
         if (event.key_code == SAPP_KEYCODE_Z)
         {
-            gotoAction(m_blockEditData->historyPointer - 1);
+            gotoAction(m_blockEditData.historyPointer - 1);
             return true;
         }
         else if (event.key_code == SAPP_KEYCODE_Y)
         {
-            gotoAction(m_blockEditData->historyPointer + 1);
+            gotoAction(m_blockEditData.historyPointer + 1);
             return true;
         }
         return false;
