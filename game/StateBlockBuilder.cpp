@@ -163,9 +163,9 @@ public:
         }
 
         // rotates
-        // copying grid for rotation
-        // we could rotate in place but this is much more readable and perf doesn't matter that much here
-        auto rotateCopy = [&](ivec3(*rotate)(ivec3, int)) {
+        auto rotateGrid = [&](ivec3(*rotate)(ivec3, int)) {
+            // copying grid for rotation
+            // we could transpose in place but this is much more readable and perf doesn't matter that much here
             BlockData::Grid::Buf b2 = {};
             forEachSet(grid, [&](ivec3 v) {
                 auto rv = rotate(v, grid.size);
@@ -175,19 +175,19 @@ public:
         };
         if (ImGui::Button("R x"))
         {
-            rotateCopy(RotateX_CW);
+            rotateGrid(RotateX_CW);
             addAction("rotate x");
         }
         ImGui::SameLine();
         if (ImGui::Button("R y"))
         {
-            rotateCopy(RotateY_CW);
+            rotateGrid(RotateY_CW);
             addAction("rotate y");
         }
         ImGui::SameLine();
         if (ImGui::Button("R z"))
         {
-            rotateCopy(RotateZ_CW);
+            rotateGrid(RotateZ_CW);
             addAction("rotate z");
         }
 
