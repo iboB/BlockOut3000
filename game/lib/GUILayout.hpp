@@ -11,7 +11,7 @@
 
 #include "rlayout.hpp"
 
-#include <itlib/memory_view.hpp>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -35,7 +35,7 @@ public:
 
     void registerNamedElement(NamedElement& elem);
 
-    itlib::const_memory_view<NamedElement*> namedElements() const { return itlib::make_memory_view(m_namedElements); }
+    std::span<const NamedElement* const> namedElements() const { return m_namedElements; }
 
     void update(ivec2 size);
 

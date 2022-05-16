@@ -12,7 +12,7 @@
 
 #include "lib/sokol-gfx-utils.hpp"
 
-#include <itlib/memory_view.hpp>
+#include <span>
 #include <vector>
 
 BasicPit::BasicPit(ivec3 size)
@@ -56,7 +56,7 @@ void BasicPit::draw(Renderer& r)
 
 namespace
 {
-void scalePitVertices(itlib::memory_view<Vertex> vertices, float epsilon)
+void scalePitVertices(std::span<Vertex> vertices, float epsilon)
 {
     for (auto& v : vertices)
     {
@@ -129,7 +129,7 @@ void BasicPit::createBuffers()
 
     // make the pit box just a tiny bit larger, so that it doesn't z-fight the wires
     static constexpr float EPS = 0.02f;
-    scalePitVertices(itlib::memory_view(solidVertices, std::size(solidVertices)), EPS);
+    scalePitVertices(solidVertices, EPS);
     m_solid = Mesh::create(solidVertices);
 
     std::vector<Vertex> wireVertices;
@@ -156,6 +156,6 @@ void BasicPit::createBuffers()
         wireVertices.insert(wireVertices.end(), {{0, h, d}, {0, h, 0}, {0, h, 0}, {w, h, 0}, {w, h, 0}, {w, h, d}});
     }
 
-    scalePitVertices(itlib::make_memory_view(wireVertices), EPS / 2);
+    scalePitVertices(wireVertices, EPS / 2);
     m_wire = Mesh::create(wireVertices);
 }
