@@ -57,9 +57,9 @@ public:
 
         m_renderer.init();
 
-        auto state = MakeState_BlockBuilder();
+        //auto state = MakeState_BlockBuilder();
         //auto state = MakeState_Experimental();
-        //auto state = MakeState_LayoutTest();
+        auto state = MakeState_LayoutTest();
         m_state = std::make_shared<InitialState>(std::move(state));
     }
 

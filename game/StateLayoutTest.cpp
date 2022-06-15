@@ -12,6 +12,7 @@
 
 #include "LayoutExperimental.hpp"
 #include "LayoutBlockBuilder.hpp"
+#include "LayoutBlockTest.hpp"
 
 #include "lib/imgui.hpp"
 #include "lib/sokol-app.h"
@@ -26,6 +27,7 @@ public:
         // add layouts to test with
         m_layouts.emplace_back(new LayoutBlockBuilder);
         m_layouts.emplace_back(new LayoutExperimental);
+        m_layouts.emplace_back(new LayoutBlockTest);
     }
 
     virtual const char* name() const override { return "Layout Test"; }
