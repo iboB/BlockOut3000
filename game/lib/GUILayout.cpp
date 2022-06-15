@@ -46,6 +46,8 @@ void GUILayout::update(ivec2 screenSize)
         elem->size.x = rect[2];
         elem->size.y = rect[3];
     }
+
+    tweakElements();
 }
 
 void GUILayout::resetContext()

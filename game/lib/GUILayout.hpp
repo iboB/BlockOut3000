@@ -49,6 +49,7 @@ protected:
 
     void resetContext();
     virtual void updateElements() {}
+    virtual void tweakElements() {}
 
     lay_context m_lctx;
     lay_id m_root;

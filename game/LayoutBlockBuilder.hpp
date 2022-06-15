@@ -24,6 +24,7 @@ public:
 private:
     virtual void updateElements() override;
     void createElements();
+    virtual void tweakElements() override;
 
     NamedElement m_sets;
     NamedElement m_curSet;

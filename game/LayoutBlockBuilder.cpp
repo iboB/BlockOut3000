@@ -85,3 +85,8 @@ void LayoutBlockBuilder::createElements()
         registerNamedElement(m_undoRedo);
     }
 }
+
+void LayoutBlockBuilder::tweakElements() {
+    auto min = std::min(m_blockPreview.size.x, m_blockPreview.size.y);
+    m_blockPreview.size = {min, min};
+}

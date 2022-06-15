@@ -337,8 +337,7 @@ public:
     {
         auto& r = App::r();
         auto& previewArea = m_layout.blockPreview();
-        auto minSize = std::min(previewArea.size.x, previewArea.size.y);
-        sg_apply_viewport(previewArea.topLeft.x, previewArea.topLeft.y, minSize, minSize, true);
+        sg_apply_viewport(previewArea.topLeft.x, previewArea.topLeft.y, previewArea.size.x, previewArea.size.y, true);
         m_physicalData.pit->draw(r);
         if (m_physicalData.block) m_physicalData.block->draw(r, m_physicalData.pit->projView());
     }
