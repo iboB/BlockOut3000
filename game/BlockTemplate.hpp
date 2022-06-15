@@ -39,7 +39,7 @@ public:
 
     const std::string& name() const { return m_name; }
     int grid() const { return m_grid; }
-    const std::vector<ivec3> elements() const { return m_elements; }
+    const std::vector<ivec3>& elements() const { return m_elements; }
 
     void draw(Renderer& r, const matrix& pvm);
 

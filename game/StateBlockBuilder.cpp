@@ -14,6 +14,7 @@
 #include "BasicPit.hpp"
 #include "BlockTemplate.hpp"
 #include "Renderer.hpp"
+#include "StateBlockTest.hpp"
 
 #include "lib/imgui.hpp"
 #include "lib/sokol-app.h"
@@ -73,7 +74,7 @@ struct BlockPhysicalData
 {
     BlockData source;
     std::unique_ptr<BasicPit> pit;
-    std::unique_ptr<BlockTemplate> block;
+    BlockTemplatePtr block;
 };
 
 void ImGui_BeginLayoutWindow(const GUILayout::NamedElement& elem)
@@ -83,12 +84,14 @@ void ImGui_BeginLayoutWindow(const GUILayout::NamedElement& elem)
     ImGui::Begin(elem.name.c_str());
 }
 
-class StateBlockBuilder final : public AppState
+class StateBlockBuilder final : public AppState, public std::enable_shared_from_this<StateBlockBuilder>
 {
 public:
     LayoutBlockBuilder m_layout;
     BlockEditData m_blockEditData;
     BlockPhysicalData m_physicalData;
+
+    AppStatePtr m_nextState;
 
     StateBlockBuilder() {}
 
@@ -96,6 +99,8 @@ public:
 
     virtual bool activate() override
     {
+        m_completed = false;
+
         m_blockEditData = {};
         m_blockEditData.history.push_back({"empty", {}});
 
@@ -195,6 +200,8 @@ public:
 
         if (ImGui::Button("Test..."))
         {
+            m_nextState = MakeState_BlockTest(m_physicalData.block, shared_from_this());
+            setComplete();
         }
 
         if (ImGui::Button("Save"))
@@ -361,6 +368,8 @@ public:
         }
         return false;
     }
+
+    virtual AppStatePtr getNextState() override { return m_nextState; }
 };
 } // namespace
 

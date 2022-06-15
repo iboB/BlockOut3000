@@ -53,6 +53,8 @@ add_executable(${game}
     StateExperimental.cpp
     "StateBlockBuilder.hpp"
     "StateBlockBuilder.cpp"
+    "StateBlockTest.hpp"
+    "StateBlockTest.cpp"
     "LayoutExperimental.hpp"
     "LayoutExperimental.cpp"
     "StateLayoutTest.hpp"
