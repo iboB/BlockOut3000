@@ -1,1 +1,1 @@
-CPMAddPackage(gh:iboB/icm@1.3.3)
+CPMAddPackage(gh:iboB/icm@1.4.2)
