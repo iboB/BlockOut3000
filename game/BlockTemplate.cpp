@@ -107,7 +107,7 @@ void BlockTemplate::ensurePhysicalData()
     std::vector<LineSegment> wireSegments;
     wireSegments.reserve(allSegments.size());
 
-    for (auto segNum : allSegments)
+    for (const auto& segNum : allSegments)
     {
         if (segNum.second & 1) // odd number of encounters => we want it
         {
@@ -121,7 +121,7 @@ void BlockTemplate::ensurePhysicalData()
     std::vector<Triangle> triangles;
     triangles.reserve(allTriangles.size());
 
-    for (auto triNum : allTriangles)
+    for (const auto& triNum : allTriangles)
     {
         if (triNum.second == 1) // only unique ones
         {

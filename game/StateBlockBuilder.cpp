@@ -93,20 +93,20 @@ public:
 
     AppStatePtr m_nextState;
 
-    StateBlockBuilder() {}
+    StateBlockBuilder() {
+        m_blockEditData = {};
+        m_blockEditData.history.push_back({"empty", {}});
+
+        // force recreation of pit with invalid size data
+        m_physicalData.source.grid.size = 0;
+    }
 
     virtual const char* name() const override { return "Block Builder"; }
 
     virtual bool activate() override
     {
         m_completed = false;
-
-        m_blockEditData = {};
-        m_blockEditData.history.push_back({"empty", {}});
-
-        // force recreation of pit with invalid size data
-        m_physicalData.source.grid.size = 0;
-
+        m_nextState = {};
         return true;
     }
 
